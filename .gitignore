@@ -1,5 +1,5 @@
 target
-.settings
+.settings/*
 .classpath
 .project
 .log
@@ -8,3 +8,4 @@ target
 *.iml
 .eml
 bin
+/assets/*
