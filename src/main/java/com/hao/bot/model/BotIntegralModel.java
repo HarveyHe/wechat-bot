@@ -28,17 +28,17 @@ public class BotIntegralModel extends BaseModelClass implements Serializable {
     /** uintegral_id
     *标识
     */ 
-    private java.lang.Integer uintegralId;
+    private java.lang.Integer integralId;
     
-    @Column(name = "uintegral_id")
+    @Column(name = "integral_id")
     @Id @GeneratedValue(strategy = GenerationType.AUTO)   
-    public java.lang.Integer getUintegralId(){
-        return this.uintegralId;
+    public java.lang.Integer getIntegralId(){
+        return this.integralId;
     }
     
-    public void setUintegralId(java.lang.Integer uintegralId){
-        this.uintegralId = uintegralId;
-        super.addValidField("uintegralId");
+    public void setIntegralId(java.lang.Integer integralId){
+        this.integralId = integralId;
+        super.addValidField("integralId");
     }
     
   
