@@ -14,5 +14,16 @@
 			</map>
 		</property>
 	</bean>
+	
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+		<constructor-arg name="secret" value="${wau.password.encoderSecret}" />
+	</bean>
+
+	<bean id="passwordUtils" class="com.hao.bot.utils.PasswordUtils">
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="passwordPattern" value="${wau.password.pattern}" />
+		<property name="invalidMessage" value="${wau.password.invalidMessage}" />
+	</bean>
 
 </beans>
