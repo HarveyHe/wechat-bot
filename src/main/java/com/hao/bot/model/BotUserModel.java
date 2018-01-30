@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 
 /**
  * Model class for bot_user
- * 
+ * 管理用户表
  */
 @Entity
 @Table(name = "bot_user")

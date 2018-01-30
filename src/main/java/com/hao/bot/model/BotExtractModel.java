@@ -12,81 +12,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 /**
- * Model class for bot_integral
- * 积分
+ * Model class for bot_extract
+ * 提取记录
  */
 @Entity
-@Table(name = "bot_integral")
+@Table(name = "bot_extract")
 @DynamicInsert
 @DynamicUpdate
-public class BotIntegralModel extends BaseModelClass implements Serializable {
+public class BotExtractModel extends BaseModelClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     
   
-    /** uintegral_id
+    /** extract_id
     *标识
     */ 
-    private java.lang.Integer uintegralId;
+    private java.lang.Integer extractId;
     
-    @Column(name = "uintegral_id")
+    @Column(name = "extract_id")
     @Id @GeneratedValue(strategy = GenerationType.AUTO)   
-    public java.lang.Integer getUintegralId(){
-        return this.uintegralId;
+    public java.lang.Integer getExtractId(){
+        return this.extractId;
     }
     
-    public void setUintegralId(java.lang.Integer uintegralId){
-        this.uintegralId = uintegralId;
-        super.addValidField("uintegralId");
-    }
-    
-  
-    /** to_user_name
-    *微信会员id
-    */ 
-    private java.lang.String toUserName;
-    
-    @Column(name = "to_user_name")
-    public java.lang.String getToUserName(){
-        return this.toUserName;
-    }
-    
-    public void setToUserName(java.lang.String toUserName){
-        this.toUserName = toUserName;
-        super.addValidField("toUserName");
-    }
-    
-  
-    /** user_name
-    *会员名称
-    */ 
-    private java.lang.String userName;
-    
-    @Column(name = "user_name")
-    public java.lang.String getUserName(){
-        return this.userName;
-    }
-    
-    public void setUserName(java.lang.String userName){
-        this.userName = userName;
-        super.addValidField("userName");
-    }
-    
-  
-    /** remaining_points
-    *剩余积分
-    */ 
-    private java.lang.Double remainingPoints;
-    
-    @Column(name = "remaining_points")
-    public java.lang.Double getRemainingPoints(){
-        return this.remainingPoints;
-    }
-    
-    public void setRemainingPoints(java.lang.Double remainingPoints){
-        this.remainingPoints = remainingPoints;
-        super.addValidField("remainingPoints");
+    public void setExtractId(java.lang.Integer extractId){
+        this.extractId = extractId;
+        super.addValidField("extractId");
     }
     
   
@@ -151,6 +103,70 @@ public class BotIntegralModel extends BaseModelClass implements Serializable {
     public void setModifier(java.lang.Integer modifier){
         this.modifier = modifier;
         super.addValidField("modifier");
+    }
+    
+  
+    /** points
+    *数量
+    */ 
+    private java.lang.Double points;
+    
+    @Column(name = "points")
+    public java.lang.Double getPoints(){
+        return this.points;
+    }
+    
+    public void setPoints(java.lang.Double points){
+        this.points = points;
+        super.addValidField("points");
+    }
+    
+  
+    /** to_user_name
+    *微信会员
+    */ 
+    private java.lang.String toUserName;
+    
+    @Column(name = "to_user_name")
+    public java.lang.String getToUserName(){
+        return this.toUserName;
+    }
+    
+    public void setToUserName(java.lang.String toUserName){
+        this.toUserName = toUserName;
+        super.addValidField("toUserName");
+    }
+    
+  
+    /** user_name
+    *微信会员名称
+    */ 
+    private java.lang.String userName;
+    
+    @Column(name = "user_name")
+    public java.lang.String getUserName(){
+        return this.userName;
+    }
+    
+    public void setUserName(java.lang.String userName){
+        this.userName = userName;
+        super.addValidField("userName");
+    }
+    
+  
+    /** status
+    *审核状态：0待审核，1审核通过，-1审核不通过
+    */ 
+    private java.lang.Integer status;
+    
+    @Column(name = "status")
+    public java.lang.Integer getStatus(){
+        return this.status;
+    }
+    
+    public void setStatus(java.lang.Integer status){
+        this.status = status;
+        super.addValidField("status");
     }
     
 }

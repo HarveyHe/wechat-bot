@@ -12,33 +12,65 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 /**
- * Model class for bot_integral
- * 积分
+ * Model class for bot_recharge
+ * 充分记录
  */
 @Entity
-@Table(name = "bot_integral")
+@Table(name = "bot_recharge")
 @DynamicInsert
 @DynamicUpdate
-public class BotIntegralModel extends BaseModelClass implements Serializable {
+public class BotRechargeModel extends BaseModelClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     
   
-    /** uintegral_id
+    /** recharge_id
     *标识
     */ 
-    private java.lang.Integer uintegralId;
+    private java.lang.Integer rechargeId;
     
-    @Column(name = "uintegral_id")
+    @Column(name = "recharge_id")
     @Id @GeneratedValue(strategy = GenerationType.AUTO)   
-    public java.lang.Integer getUintegralId(){
-        return this.uintegralId;
+    public java.lang.Integer getRechargeId(){
+        return this.rechargeId;
     }
     
-    public void setUintegralId(java.lang.Integer uintegralId){
-        this.uintegralId = uintegralId;
-        super.addValidField("uintegralId");
+    public void setRechargeId(java.lang.Integer rechargeId){
+        this.rechargeId = rechargeId;
+        super.addValidField("rechargeId");
+    }
+    
+  
+    /** points
+    *充值数量
+    */ 
+    private java.lang.Double points;
+    
+    @Column(name = "points")
+    public java.lang.Double getPoints(){
+        return this.points;
+    }
+    
+    public void setPoints(java.lang.Double points){
+        this.points = points;
+        super.addValidField("points");
+    }
+    
+  
+    /** status
+    *审核状态：0待审核，1审核通过，-1审核不通过
+    */ 
+    private java.lang.Integer status;
+    
+    @Column(name = "status")
+    public java.lang.Integer getStatus(){
+        return this.status;
+    }
+    
+    public void setStatus(java.lang.Integer status){
+        this.status = status;
+        super.addValidField("status");
     }
     
   
@@ -59,7 +91,7 @@ public class BotIntegralModel extends BaseModelClass implements Serializable {
     
   
     /** user_name
-    *会员名称
+    *微信会员名称
     */ 
     private java.lang.String userName;
     
@@ -71,22 +103,6 @@ public class BotIntegralModel extends BaseModelClass implements Serializable {
     public void setUserName(java.lang.String userName){
         this.userName = userName;
         super.addValidField("userName");
-    }
-    
-  
-    /** remaining_points
-    *剩余积分
-    */ 
-    private java.lang.Double remainingPoints;
-    
-    @Column(name = "remaining_points")
-    public java.lang.Double getRemainingPoints(){
-        return this.remainingPoints;
-    }
-    
-    public void setRemainingPoints(java.lang.Double remainingPoints){
-        this.remainingPoints = remainingPoints;
-        super.addValidField("remainingPoints");
     }
     
   
