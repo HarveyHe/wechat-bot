@@ -1,6 +1,9 @@
 package me.biezhi.wechat.model;
 
+import java.util.Map;
+
 import com.blade.kit.json.JSONArray;
+import com.blade.kit.json.JSONObject;
 
 public class WechatContact {
 
@@ -9,8 +12,9 @@ public class WechatContact {
 	private JSONArray contactList;
 	private JSONArray groupList;
 	
+	private Map<String, JSONObject> contactMap;
+	
 	public WechatContact() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public JSONArray getMemberList() {
@@ -36,5 +40,15 @@ public class WechatContact {
 	public void setGroupList(JSONArray groupList) {
 		this.groupList = groupList;
 	}
+
+	public Map<String, JSONObject> getContactMap() {
+		return contactMap;
+	}
+
+	public void setContactMap(Map<String, JSONObject> contactMap) {
+		this.contactMap = contactMap;
+	}
+	
+	
 	
 }

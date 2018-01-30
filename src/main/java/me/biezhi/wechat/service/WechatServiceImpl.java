@@ -1,7 +1,10 @@
 package me.biezhi.wechat.service;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +15,7 @@ import com.blade.kit.http.HttpRequest;
 import com.blade.kit.json.JSONArray;
 import com.blade.kit.json.JSONKit;
 import com.blade.kit.json.JSONObject;
+import com.hao.bot.handler.GroudMessageHandler;
 
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.exception.WechatException;
@@ -61,7 +65,7 @@ public class WechatServiceImpl implements WechatService {
 				if (ret == 0) {
 					JSONArray memberList = jsonObject.get("MemberList").asArray();
 					JSONArray contactList = new JSONArray();
-					
+					Map<String, JSONObject> contactMap = new HashMap<>();
 					if (null != memberList) {
 						for (int i = 0, len = memberList.size(); i < len; i++) {
 							JSONObject contact = memberList.get(i).asJSONObject();
@@ -75,18 +79,19 @@ public class WechatServiceImpl implements WechatService {
 							}
 							// 群聊
 							if (contact.getString("UserName").indexOf("@@") != -1) {
-								continue;
+//								continue;
 							}
 							// 自己
 							if (contact.getString("UserName").equals(wechatMeta.getUser().getString("UserName"))) {
-								continue;
+//								continue;
 							}
 							contactList.add(contact);
+							contactMap.put(contact.getString("UserName"), contact);
 						}
 
+						wechatContact.setContactMap(contactMap);
 						wechatContact.setContactList(contactList);
 						wechatContact.setMemberList(memberList);
-						
 						this.getGroup(wechatMeta, wechatContact);
 						
 						return wechatContact;
@@ -127,7 +132,6 @@ public class WechatServiceImpl implements WechatService {
 				if (ret == 0) {
 					JSONArray memberList = jsonObject.get("MemberList").asArray();
 					JSONArray contactList = new JSONArray();
-					
 					if (null != memberList) {
 						for (int i = 0, len = memberList.size(); i < len; i++) {
 							JSONObject contact = memberList.get(i).asJSONObject();
@@ -149,7 +153,6 @@ public class WechatServiceImpl implements WechatService {
 							}
 							contactList.add(contact);
 						}
-						
 						wechatContact.setContactList(contactList);
 						wechatContact.setMemberList(memberList);
 					}
@@ -343,6 +346,7 @@ public class WechatServiceImpl implements WechatService {
 	/**
 	 * 处理消息
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void handleMsg(WechatMeta wechatMeta, JSONObject data) {
 		if (null == data) {
@@ -355,6 +359,7 @@ public class WechatServiceImpl implements WechatService {
 			LOGGER.info("你有新的消息，请注意查收");
 			JSONObject msg = AddMsgList.get(i).asJSONObject();
 			int msgType = msg.getInt("MsgType", 0);
+			String toUserName = getUserRemarkName(msg.getString("ToUserName"));
 			String name = getUserRemarkName(msg.getString("FromUserName"));
 			String content = msg.getString("Content");
 			
@@ -364,12 +369,35 @@ public class WechatServiceImpl implements WechatService {
 				if (Constant.FILTER_USERS.contains(msg.getString("ToUserName"))) {
 					continue;
 				} else if (msg.getString("FromUserName").equals(wechatMeta.getUser().getString("UserName"))) {
+					if(name.equals("重要的测试群")){
+						String[] peopleContent = content.split(":<br/>");
+						String toSendName = this.getUserRemarkName(peopleContent[0]);
+						String message = "自动回复：" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
+						webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
+						
+						LOGGER.info(name + ": " + content);
+					}
 					continue;
 				} else if (msg.getString("ToUserName").indexOf("@@") != -1) {
 					String[] peopleContent = content.split(":<br/>");
 					LOGGER.info("|" + name + "| " + peopleContent[0] + ":\n" + peopleContent[1].replace("<br/>", "\n"));
 				} else {
+					if(name.equals("重要的测试群")){
+						String[] peopleContent = content.split(":<br/>");
+						String toSendName = this.getUserRemarkName(peopleContent[0]);
+//						String message = "自动回复：@" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
+						
+						String message = new GroudMessageHandler(toSendName, peopleContent[1]).handler();
+						if(StringUtils.isNotBlank(message)){
+							
+							webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
+						}
+						
+						LOGGER.info(name + ": " + content);
+					}
+//					name = getUserRemarkNameByGroup(msg.getString("FromUserName"));
 					LOGGER.info(name + ": " + content);
+					String[] peopleContent = content.split(":<br/>");
 					String ans = robot.talk(content);
 //					webwxsendmsg(wechatMeta, ans, msg.getString("FromUserName"));
 					LOGGER.info("自动回复 " + ans);
@@ -420,8 +448,28 @@ public class WechatServiceImpl implements WechatService {
 	
 	private String getUserRemarkName(String id) {
 		String name = "这个人物名字未知";
-		for (int i = 0, len = Constant.CONTACT.getMemberList().size(); i < len; i++) {
+		JSONObject member = Constant.CONTACT.getContactMap().get(id);
+		if(member != null){
+			return member.getString("NickName");
+		}
+		/*for (int i = 0, len = Constant.CONTACT.getMemberList().size(); i < len; i++) {
 			JSONObject member = Constant.CONTACT.getMemberList().get(i).asJSONObject();
+			if (member.getString("UserName").equals(id)) {
+				if (StringKit.isNotBlank(member.getString("RemarkName"))) {
+					name = member.getString("RemarkName");
+				} else {
+					name = member.getString("NickName");
+				}
+				return name;
+			}
+		}
+		*/
+		return name;
+	}
+	private String getUserRemarkNameByGroup(String id) {
+		String name = "这个人物名字未知";
+		for (int i = 0, len = Constant.CONTACT.getGroupList().size(); i < len; i++) {
+			JSONObject member = Constant.CONTACT.getGroupList().get(i).asJSONObject();
 			LOGGER.info(member.toString());
 			LOGGER.info(member.getString("NickName"));
 			if (member.getString("UserName").equals(id)) {
