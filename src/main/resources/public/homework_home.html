@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+	<title>布置功课</title>
+	<link rel="stylesheet" href="./css/weui.min.css" />
+	<link rel="stylesheet" href="./css/css.css?v=2" />
+	<link rel="stylesheet" href="./css/example.css" />
+	<style type="text/css">
+		.weui-btn{
+			padding: 10px;
+			background-color: #F5A623;
+		}
+		.btn-group{
+			position: absolute;
+			top: 45%;
+			transform: translate(-50%,-45%);
+			left: 50%;
+			width: 250px;
+		}
+	</style>
+</head>
+
+<body ontouchstart>
+	<div class="container" id="container" style="overflow-y: auto;">
+	    <div class="page home js_show" style="background:url('images/bg1.png') no-repeat;background-size:100% 100%;height:100%;">
+			<div class="page__bd" style="height:100%">
+				<div class="page__bd page__bd_spacing" style="height:100%;">
+					<div class="btn-group">
+						<input type="text" style="display:none;" id="what" />
+				    	<a class="weui-btn" id="btnHomework">我要布置学习</a>
+				    	<a class="weui-btn" id="btnExam">我要布置作业</a>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--BEGIN toast-->
+		<div id="toast" style="display: none;">
+			<div class="weui-mask_transparent"></div>
+			<div class="weui-toast">
+				<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+				<p class="weui-toast__content">&nbsp;</p>
+			</div>
+		</div>
+		<!--end toast-->
+		<!--BEGIN dialog-->
+		<div id="dialogs">
+			<div class="js_dialog" id="Dialog" style="display: none;">
+				<div class="weui-mask"></div>
+				<div class="weui-dialog">
+					<div class="weui-dialog__bd"></div>
+					<div class="weui-dialog__ft">
+						<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">知道了</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--END dialog-->
+	</div>
+	<script src="./js/zepto.min.js"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="./js/weui.min.js"></script>
+	<script src="./js/js.js?v=12"></script>
+	<script src="./js/example.js"></script>
+	<script type="text/html" id="chooseRole">
+		<div class="page" style="background:url('images/bg1.png') no-repeat;background-size:100% 100%;height:100%;">
+			<div class="page__bd" style="height:100%">
+				<div class="page__bd page__bd_spacing" style="height:100%;">
+					<div class="btn-group">
+						<a class="weui-btn" id="btnChildren">为孩子布置</a>
+						<a class="weui-btn" id="btnStudent">为学生布置</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(function(){
+				$('#btnChildren').on('click',function(){
+					localStorage.setItem("target","C");
+					location.href = baseUri + "/homework_"+ $("#what").val() + "1.html";
+				});
+
+				$('#btnStudent').on('click',function(){
+					localStorage.setItem("target","S");
+					location.href = baseUri + "/homework_"+ $("#what").val() + "1.html";			
+				});
+			});
+	</script>
+	<script type="text/javascript">
+		(function(){
+			localStorage.removeItem("isParent");
+			localStorage.removeItem("isTeacher");
+			localStorage.removeItem("examConfig");
+			localStorage.removeItem("learningConfig");
+			localStorage.removeItem("recordId");
+			localStorage.removeItem("target");
+		})();
+		$(function () {
+			$checkBinding(true, function (result) {				
+				localStorage.setItem("isParent",result.userInfo.isParent);
+				localStorage.setItem("isTeacher", result.userInfo.isTeacher);
+			});
+
+			$("#btnHomework").on("click", function(){
+				$("#what").val("learn");
+				if (localStorage.isParent == "true" && localStorage.isTeacher == "true") {
+					window.pageManager.go("chooseRole");
+				} else {
+					location.href = baseUri + "/homework_learn1.html";
+				}
+			});
+			
+			$("#btnExam").on("click", function () {
+				$("#what").val("exam");				
+				if (localStorage.isParent == "true" && localStorage.isTeacher == "true") {
+					window.pageManager.go("chooseRole");
+				} else {
+					location.href = baseUri + "/homework_exam1.html";
+				}
+			});
+
+			$('#dialogs').on('click', '.weui-dialog__btn', function () {
+				$(this).parents('.js_dialog').fadeOut(200);
+			});
+		});
+	</script>
+</body>
+
+</html>
