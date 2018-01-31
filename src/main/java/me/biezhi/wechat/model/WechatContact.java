@@ -14,6 +14,8 @@ public class WechatContact {
 	
 	private Map<String, JSONObject> contactMap;
 	
+	private Map<String, JSONObject> groupMap; //群聊，群用户
+	
 	public WechatContact() {
 	}
 
@@ -48,6 +50,15 @@ public class WechatContact {
 	public void setContactMap(Map<String, JSONObject> contactMap) {
 		this.contactMap = contactMap;
 	}
+
+	public Map<String, JSONObject> getGroupMap() {
+		return groupMap;
+	}
+
+	public void setGroupMap(Map<String, JSONObject> groupMap) {
+		this.groupMap = groupMap;
+	}
+	
 	
 	
 	

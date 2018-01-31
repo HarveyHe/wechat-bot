@@ -68,6 +68,14 @@ public class WechatRobot {
 			});
 		}
 	}
+	public String getQrCodeUrl() throws WechatException {
+		String uuid = wechatService.getUUID();
+		wechatMeta.setUuid(uuid);
+		
+		LOGGER.info("获取到uuid为 [{}]", uuid);
+		String url = Constant.QRCODE_URL + uuid;
+		return url;
+	}
 
 	/**
 	 * 等待登录

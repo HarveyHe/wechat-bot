@@ -47,8 +47,8 @@
 			<artifactId>eaf-hbmtool</artifactId>
 			<version>1.0.10</version>
 			<scope>provided</scope>
-		</dependency>
-		 -->
+		</dependency> -->
+		
 		
 
 		<!-- <dependency>
@@ -198,7 +198,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>com.gsst.exchange.main.Application</mainClass>
+							<mainClass>com.hao.bot.main.Application</mainClass>
 							<classpathPrefix>./lib/</classpathPrefix>
 							<useUniqueVersions>flase</useUniqueVersions>
 						</manifest>
