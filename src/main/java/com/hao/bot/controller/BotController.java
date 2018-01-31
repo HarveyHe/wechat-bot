@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blade.kit.base.Config;
+import com.hao.bot.entity.RestResult;
 import com.hao.bot.thread.MyThread;
 
-import io.github.biezhi.wechat.api.enums.MsgType;
-import io.github.biezhi.wechat.api.model.WeChatMessage;
-import io.github.biezhi.wechat.utils.DateUtils;
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.WechatRobot;
 
@@ -26,8 +24,9 @@ public class BotController {
 	
 	
 	@RequestMapping(value = "/start.do",method = { RequestMethod.POST ,RequestMethod.GET})
-	public String start(HttpServletRequest request, HttpServletResponse response){
+	public RestResult<String> start(HttpServletRequest request, HttpServletResponse response){
 		logger.info("启动");
+		RestResult<String> result = new RestResult<>();
 		try {
 			
 			Constant.config = Config.load("classpath:config.properties");
@@ -36,12 +35,19 @@ public class BotController {
 			String url = wechatRobot.getQrCodeUrl();
 			MyThread myThread = new com.hao.bot.thread.MyThread(wechatRobot);
 			myThread.start();
-			return url;
+			result.setCode(0);
+			result.setData(url);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "启动失败";
+			logger.info("content",e);
+			result.setCode(0);
+			result.setMessage("启动失败");
 		}
-		
+		return result;
+	}
+	
+	@RequestMapping(value = "/query/order.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	public RestResult<String> queryOrder(HttpServletRequest request, HttpServletResponse response){
+		return null;
 	}
 }
