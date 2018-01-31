@@ -1,10 +1,11 @@
 package com.hao.bot.service;    
 
-import com.gsst.eaf.core.service.BaseService;
-import com.hao.bot.model.BotOrderModel;
-import com.gsst.eaf.core.model.PagingInfo;
 import java.util.Collection;
 import java.util.List;
+
+import com.gsst.eaf.core.model.PagingInfo;
+import com.gsst.eaf.core.service.BaseService;
+import com.hao.bot.model.BotOrderModel;
 
 public interface BotOrderService extends BaseService {
 
@@ -19,5 +20,8 @@ public interface BotOrderService extends BaseService {
     BotOrderModel save(BotOrderModel model);
     
     Collection<BotOrderModel> saveAll(Collection<BotOrderModel> models);
+    
+    
+    public BotOrderModel getByToUserId(String id,Integer status);
     
 }

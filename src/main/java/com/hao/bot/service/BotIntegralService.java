@@ -20,4 +20,6 @@ public interface BotIntegralService extends BaseService {
     
     Collection<BotIntegralModel> saveAll(Collection<BotIntegralModel> models);
     
+    BotIntegralModel getByToUserId(String id);
+    
 }

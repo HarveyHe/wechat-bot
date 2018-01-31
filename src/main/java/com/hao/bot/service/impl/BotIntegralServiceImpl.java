@@ -5,6 +5,8 @@ import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.model.BotIntegralModel;
 import com.gsst.eaf.core.model.PagingInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -37,5 +39,16 @@ public class BotIntegralServiceImpl extends BaseServiceImpl
     
    public Collection<BotIntegralModel> saveAll(Collection<BotIntegralModel> models){
        return this.dao.saveAll(models);
-   }        
+   }
+
+	@Override
+	public BotIntegralModel getByToUserId(String id) {
+		BotIntegralModel example = new BotIntegralModel();
+		example.setToUserName(id);
+		List<BotIntegralModel> list = this.dao.findByExample(example);
+		if(CollectionUtils.isEmpty(list)){
+			return null;
+		}
+		return list.get(0);
+	}        
 }

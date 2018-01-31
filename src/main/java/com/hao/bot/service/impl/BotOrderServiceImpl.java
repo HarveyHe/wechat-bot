@@ -1,12 +1,15 @@
 package com.hao.bot.service.impl;    
 
-import com.gsst.eaf.core.service.impl.BaseServiceImpl;
-import com.hao.bot.service.BotOrderService;
-import com.hao.bot.model.BotOrderModel;
-import com.gsst.eaf.core.model.PagingInfo;
-import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.gsst.eaf.core.model.PagingInfo;
+import com.gsst.eaf.core.service.impl.BaseServiceImpl;
+import com.hao.bot.model.BotOrderModel;
+import com.hao.bot.service.BotOrderService;
 
 @Service
 public class BotOrderServiceImpl extends BaseServiceImpl
@@ -37,5 +40,17 @@ public class BotOrderServiceImpl extends BaseServiceImpl
     
    public Collection<BotOrderModel> saveAll(Collection<BotOrderModel> models){
        return this.dao.saveAll(models);
-   }        
+   }
+
+	@Override
+	public BotOrderModel getByToUserId(String id,Integer status) {
+		BotOrderModel example = new BotOrderModel();
+		example.setToUserName(id);
+		example.setStatus(status);
+		List<BotOrderModel> list = this.dao.findByExample(example);
+		if(CollectionUtils.isEmpty(list)){
+			return null;
+		}
+		return list.get(0);
+	}        
 }
