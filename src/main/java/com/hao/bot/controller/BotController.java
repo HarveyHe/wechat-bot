@@ -6,11 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blade.kit.base.Config;
+import com.hao.bot.entity.CommonRequest;
+import com.hao.bot.entity.OrderRequestEntity;
 import com.hao.bot.entity.RestResult;
 import com.hao.bot.thread.MyThread;
 
@@ -47,7 +50,7 @@ public class BotController {
 	}
 	
 	@RequestMapping(value = "/query/order.do",method = { RequestMethod.POST ,RequestMethod.GET})
-	public RestResult<String> queryOrder(HttpServletRequest request, HttpServletResponse response){
+	public RestResult<String> queryOrder(@RequestBody CommonRequest<OrderRequestEntity>  request){
 		return null;
 	}
 }
