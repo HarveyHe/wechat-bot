@@ -1,7 +1,9 @@
 package me.biezhi.wechat.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +96,8 @@ public class WechatServiceImpl implements WechatService {
 						wechatContact.setMemberList(memberList);
 						this.getGroup(wechatMeta, wechatContact);
 						
+						
+						this.getGroupContactList(wechatMeta, wechatContact);
 						return wechatContact;
 					}
 				}
@@ -155,6 +159,76 @@ public class WechatServiceImpl implements WechatService {
 						}
 						wechatContact.setContactList(contactList);
 						wechatContact.setMemberList(memberList);
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new WechatException(e);
+		}
+	}
+	
+	private void getGroupContactList(WechatMeta wechatMeta, WechatContact wechatContact) {
+		String url = wechatMeta.getBase_uri() + "/webwxbatchgetcontact?type=ex&pass_ticket=" + wechatMeta.getPass_ticket() + "&skey="
+				+ wechatMeta.getSkey() + "&r=" + DateKit.getCurrentUnixTime();
+		
+		JSONObject body = new JSONObject();
+		body.put("BaseRequest", wechatMeta.getBaseRequest());
+		
+		JSONArray contactList1 = new JSONArray();
+		for (int i = 0, len = wechatContact.getContactList().size(); i < len; i++) {
+			JSONObject member = wechatContact.getContactList().get(i).asJSONObject();
+			if (member.getString("UserName").contains("@@")) {
+				contactList1.add(member);
+			}
+		}
+		LOGGER.debug("--------------------");
+		LOGGER.debug(contactList1.toString());
+		// 群账号
+		List<Map<String, String>> list = new ArrayList<>(contactList1.size());
+		
+		for (int i = 0, len = contactList1.size(); i < len; i++) {
+			JSONObject member = contactList1.get(i).asJSONObject();
+			Map<String, String> map = new HashMap<>(2);
+			map.put("UserName", member.getString("UserName"));
+			map.put("EncryChatRoomId", "");
+			list.add(map);
+		}
+		body.put("Count", contactList1.size());
+		body.put("List", list);
+		
+		HttpRequest request = HttpRequest.post(url).contentType("application/json;charset=utf-8")
+				.header("Cookie", wechatMeta.getCookie()).send(body.toString());
+		
+		LOGGER.debug(request.toString());
+		String res = request.body();
+		request.disconnect();
+		
+		if (StringKit.isBlank(res)) {
+			throw new WechatException("获取群信息失败");
+		}
+		
+		LOGGER.debug(res);
+		
+		try {
+			JSONObject jsonObject = JSONKit.parseObject(res);
+			LOGGER.debug(jsonObject.toString());
+			LOGGER.debug("--------------------");
+			JSONObject BaseResponse = jsonObject.get("BaseResponse").asJSONObject();
+			if (null != BaseResponse) {
+				int ret = BaseResponse.getInt("Ret", -1);
+				if (ret == 0) {
+					JSONArray groudContactList = jsonObject.get("ContactList").asArray();
+//					JSONArray contactList = new JSONArray();
+					if (null != groudContactList) {
+						Map<String, JSONObject> contactMap = new HashMap<>();
+						
+						for (int i = 0, len = groudContactList.size(); i < len; i++) {
+							JSONObject contact = groudContactList.get(i).asJSONObject();
+							contactMap.put(contact.getString("UserName"), contact);
+							LOGGER.debug("-------------");;
+							LOGGER.debug(contact.toString());;
+						}
+						wechatContact.setGroupMap(contactMap);
 					}
 				}
 			}
@@ -387,7 +461,7 @@ public class WechatServiceImpl implements WechatService {
 						String toSendName = this.getUserRemarkName(peopleContent[0]);
 //						String message = "自动回复：@" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
 						
-						String message = new GroudMessageHandler(toSendName, peopleContent[1]).handler();
+						String message = new GroudMessageHandler(peopleContent[0],toSendName, peopleContent[1]).handler();
 						if(StringUtils.isNotBlank(message)){
 							
 							webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
@@ -452,33 +526,19 @@ public class WechatServiceImpl implements WechatService {
 		if(member != null){
 			return member.getString("NickName");
 		}
-		/*for (int i = 0, len = Constant.CONTACT.getMemberList().size(); i < len; i++) {
-			JSONObject member = Constant.CONTACT.getMemberList().get(i).asJSONObject();
-			if (member.getString("UserName").equals(id)) {
-				if (StringKit.isNotBlank(member.getString("RemarkName"))) {
-					name = member.getString("RemarkName");
-				} else {
-					name = member.getString("NickName");
-				}
-				return name;
-			}
-		}
-		*/
 		return name;
 	}
-	private String getUserRemarkNameByGroup(String id) {
+	private String getUserRemarkNameByGroup(String groudId,String userId) {
 		String name = "这个人物名字未知";
-		for (int i = 0, len = Constant.CONTACT.getGroupList().size(); i < len; i++) {
-			JSONObject member = Constant.CONTACT.getGroupList().get(i).asJSONObject();
-			LOGGER.info(member.toString());
-			LOGGER.info(member.getString("NickName"));
-			if (member.getString("UserName").equals(id)) {
-				if (StringKit.isNotBlank(member.getString("RemarkName"))) {
-					name = member.getString("RemarkName");
-				} else {
-					name = member.getString("NickName");
-				}
-				return name;
+		Map<String, JSONObject> groupMap = Constant.CONTACT.getGroupMap();
+		
+		JSONObject contact = null;
+		for (Map.Entry<String,JSONObject> entry : groupMap.entrySet()) {
+			String key = entry.getKey();
+			if(groudId.equals(key)){
+				contact = entry.getValue();
+				name = contact.getString("NickName");
+				break;
 			}
 		}
 		return name;
