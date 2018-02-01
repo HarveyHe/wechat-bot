@@ -65,5 +65,12 @@ public class BotExtractServiceImpl extends BaseServiceImpl
 		Object[] params = paramList.toArray(new Object[paramList.size()] );
 		return this.dao.findBySqlCondition(BotExtractModel.class,
 				sql.toString(), params,"",entity.getPagingInfo());
+	}
+	@Override
+	public Boolean audit(Integer id, Integer status) {
+		BotExtractModel model = this.get(id);
+		model.setStatus(status);
+		this.save(model);
+		return true;
 	}        
 }

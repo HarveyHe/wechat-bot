@@ -64,5 +64,12 @@ public class BotRechargeServiceImpl extends BaseServiceImpl
 		Object[] params = paramList.toArray(new Object[paramList.size()] );
 		return this.dao.findBySqlCondition(BotRechargeModel.class,
 				sql.toString(), params,"",entity.getPagingInfo());
+	}
+	@Override
+	public Boolean audit(Integer id, Integer status) {
+		BotRechargeModel model = this.get(id);
+		model.setStatus(status);
+		this.save(model);
+		return true;
 	}        
 }

@@ -68,7 +68,7 @@ public class BotController {
 			
 		} catch (Exception e) {
 			logger.info("content",e);
-			result.setCode(0);
+			result.setCode(-1);
 			result.setMessage("启动失败");
 		}
 		return result;
@@ -103,10 +103,9 @@ public class BotController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/query/rechargel.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	@RequestMapping(value = "/query/rechargel.do",method = { RequestMethod.POST ,RequestMethod.GET}, produces = "application/json")
 	public RestResult<List<BotRechargeModel>> queryRechargel(@RequestBody CommonRequest<QueryRequestEntity>  request){
 		RestResult<List<BotRechargeModel>> result = new RestResult<>();
-		
 		result.setCode(0);
 		result.setData(botRechargeService.query(request.getRequest()));
 		result.setPagingInfo(request.getRequest().getPagingInfo());
@@ -120,6 +119,33 @@ public class BotController {
 		result.setCode(0);
 		result.setData(playingRecordsService.query(request.getRequest()));
 		result.setPagingInfo(request.getRequest().getPagingInfo());
+		return result;
+	}
+	
+	@RequestMapping(value = "/audit/extract.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	public RestResult<String> auditExtract(@RequestBody CommonRequest<QueryRequestEntity>  request){
+		RestResult<String> result = new RestResult<>();
+		if(request.getRequest().getId() != null && request.getRequest().getStatus() != null){
+			botExtractService.audit(request.getRequest().getId(), request.getRequest().getStatus());
+			result.setCode(0);
+			result.setData("");
+		}else{
+			result.setCode(-1);
+			result.setData("确认失败");
+		}
+		return result;
+	}
+	@RequestMapping(value = "/audit/rechargel.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	public RestResult<String> auditRechargel(@RequestBody CommonRequest<QueryRequestEntity>  request){
+		RestResult<String> result = new RestResult<>();
+		if(request.getRequest().getId() != null && request.getRequest().getStatus() != null){
+			botRechargeService.audit(request.getRequest().getId(), request.getRequest().getStatus());
+			result.setCode(0);
+			result.setData("");
+		}else{
+			result.setCode(-1);
+			result.setData("确认失败");
+		}
 		return result;
 	}
 }
