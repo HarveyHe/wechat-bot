@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.BaseService;
+import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotOrderModel;
 
 public interface BotOrderService extends BaseService {
@@ -23,5 +24,7 @@ public interface BotOrderService extends BaseService {
     
     
     public BotOrderModel getByToUserId(String id,Integer status);
+    
+    List<BotOrderModel> query(QueryRequestEntity entity);
     
 }

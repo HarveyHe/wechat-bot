@@ -1,10 +1,12 @@
 package com.hao.bot.service;    
 
-import com.gsst.eaf.core.service.BaseService;
-import com.hao.bot.model.PlayingRecordsModel;
-import com.gsst.eaf.core.model.PagingInfo;
 import java.util.Collection;
 import java.util.List;
+
+import com.gsst.eaf.core.model.PagingInfo;
+import com.gsst.eaf.core.service.BaseService;
+import com.hao.bot.entity.QueryRequestEntity;
+import com.hao.bot.model.PlayingRecordsModel;
 
 public interface PlayingRecordsService extends BaseService {
 
@@ -19,5 +21,6 @@ public interface PlayingRecordsService extends BaseService {
     PlayingRecordsModel save(PlayingRecordsModel model);
     
     Collection<PlayingRecordsModel> saveAll(Collection<PlayingRecordsModel> models);
-    
+ 
+    List<PlayingRecordsModel> query(QueryRequestEntity entity);
 }

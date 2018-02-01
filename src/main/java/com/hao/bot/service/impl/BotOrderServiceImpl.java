@@ -1,13 +1,16 @@
 package com.hao.bot.service.impl;    
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.impl.BaseServiceImpl;
+import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotOrderModel;
 import com.hao.bot.service.BotOrderService;
 
@@ -52,5 +55,31 @@ public class BotOrderServiceImpl extends BaseServiceImpl
 			return null;
 		}
 		return list.get(0);
+	}
+
+	@Override
+	public List<BotOrderModel> query(QueryRequestEntity entity) {
+		StringBuilder sql = new StringBuilder("1=1 ");
+		List<Object> paramList = new ArrayList<>();
+		if(StringUtils.isNotBlank(entity.getToUserName())){
+			sql.append(" and to_user_name=? ");
+			paramList.add(entity.getToUserName());
+		}
+		if(StringUtils.isNotBlank(entity.getPlayingNo())){
+			sql.append(" and playing_no=? ");
+			paramList.add(entity.getPlayingNo());
+		}
+		if(StringUtils.isNotBlank(entity.getUserName())){
+			sql.append(" and user_name like ? ");
+			paramList.add("%" + entity.getUserName() + "%");
+		}
+		if(null != entity.getStatus()){
+			sql.append(" and status = ? ");
+			paramList.add(entity.getStatus());
+		}
+		sql.append(" order by create_time desc");
+		Object[] params = paramList.toArray(new Object[paramList.size()] );
+		return this.dao.findBySqlCondition(BotOrderModel.class,
+				sql.toString(), params,"",entity.getPagingInfo());
 	}        
 }

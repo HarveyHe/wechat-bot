@@ -1,10 +1,12 @@
 package com.hao.bot.service;    
 
-import com.gsst.eaf.core.service.BaseService;
-import com.hao.bot.model.BotExtractModel;
-import com.gsst.eaf.core.model.PagingInfo;
 import java.util.Collection;
 import java.util.List;
+
+import com.gsst.eaf.core.model.PagingInfo;
+import com.gsst.eaf.core.service.BaseService;
+import com.hao.bot.entity.QueryRequestEntity;
+import com.hao.bot.model.BotExtractModel;
 
 public interface BotExtractService extends BaseService {
 
@@ -19,5 +21,7 @@ public interface BotExtractService extends BaseService {
     BotExtractModel save(BotExtractModel model);
     
     Collection<BotExtractModel> saveAll(Collection<BotExtractModel> models);
+    
+    List<BotExtractModel> query(QueryRequestEntity entity);
     
 }
