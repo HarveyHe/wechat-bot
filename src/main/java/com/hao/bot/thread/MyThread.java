@@ -14,7 +14,7 @@ public class MyThread extends Thread {
     public MyThread(WechatRobot wechatRobot) {
         this.wechatRobot = wechatRobot;
     }
-
+    @Override
     public void run() {
     	while(!Constant.HTTP_OK.equals(wechatRobot.waitForLogin())){
 			try {

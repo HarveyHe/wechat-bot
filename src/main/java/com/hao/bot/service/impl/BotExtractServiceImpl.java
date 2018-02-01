@@ -16,34 +16,35 @@ import com.hao.bot.service.BotExtractService;
 @Service
 public class BotExtractServiceImpl extends BaseServiceImpl
               implements BotExtractService {
-              
-   public BotExtractModel get(java.lang.Integer id){
-       return this.dao.get(BotExtractModel.class,id);
-   }
-    
-   public List<BotExtractModel> findByExample(BotExtractModel example,PagingInfo pagingInfo){
-       if(example == null){
-           example = new BotExtractModel();
-       }
-       return this.dao.findByExample(example,null,pagingInfo);
-   }
-    
-   public void delete(BotExtractModel model){
-       this.dao.remove(model);
-   }
-    
-   public void deleteById(java.lang.Integer id){
-       this.dao.removeByPk(BotExtractModel.class,id);
-   }
-    
-   public BotExtractModel save(BotExtractModel model){
-       return this.dao.save(model);
-   }
-    
-   public Collection<BotExtractModel> saveAll(Collection<BotExtractModel> models){
-       return this.dao.saveAll(models);
-   }
-
+     
+	@Override
+	public BotExtractModel get(java.lang.Integer id){
+		return this.dao.get(BotExtractModel.class,id);
+	}
+	@Override
+	public List<BotExtractModel> findByExample(BotExtractModel example,PagingInfo pagingInfo){
+		if(example == null){
+			example = new BotExtractModel();
+		}
+		return this.dao.findByExample(example,null,pagingInfo);
+	}
+	@Override
+	public void delete(BotExtractModel model){
+		this.dao.remove(model);
+	}
+	@Override
+	public void deleteById(java.lang.Integer id){
+		this.dao.removeByPk(BotExtractModel.class,id);
+	}
+	@Override
+	public BotExtractModel save(BotExtractModel model){
+		return this.dao.save(model);
+	}
+	@Override
+	public Collection<BotExtractModel> saveAll(Collection<BotExtractModel> models){
+		return this.dao.saveAll(models);
+	}
+	
 	@Override
 	public List<BotExtractModel> query(QueryRequestEntity entity) {
 		StringBuilder sql = new StringBuilder("1=1 ");

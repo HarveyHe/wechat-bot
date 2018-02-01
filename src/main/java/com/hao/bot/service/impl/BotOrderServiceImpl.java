@@ -17,33 +17,33 @@ import com.hao.bot.service.BotOrderService;
 @Service
 public class BotOrderServiceImpl extends BaseServiceImpl
               implements BotOrderService {
-              
-   public BotOrderModel get(java.lang.Integer id){
-       return this.dao.get(BotOrderModel.class,id);
-   }
-    
-   public List<BotOrderModel> findByExample(BotOrderModel example,PagingInfo pagingInfo){
-       if(example == null){
-           example = new BotOrderModel();
-       }
-       return this.dao.findByExample(example,null,pagingInfo);
-   }
-    
-   public void delete(BotOrderModel model){
-       this.dao.remove(model);
-   }
-    
-   public void deleteById(java.lang.Integer id){
-       this.dao.removeByPk(BotOrderModel.class,id);
-   }
-    
-   public BotOrderModel save(BotOrderModel model){
-       return this.dao.save(model);
-   }
-    
-   public Collection<BotOrderModel> saveAll(Collection<BotOrderModel> models){
-       return this.dao.saveAll(models);
-   }
+	@Override     
+	public BotOrderModel get(java.lang.Integer id){
+		return this.dao.get(BotOrderModel.class,id);
+	}
+	@Override
+	public List<BotOrderModel> findByExample(BotOrderModel example,PagingInfo pagingInfo){
+		if(example == null){
+			example = new BotOrderModel();
+		}
+		return this.dao.findByExample(example,null,pagingInfo);
+	}
+	@Override
+	public void delete(BotOrderModel model){
+		this.dao.remove(model);
+	}
+	@Override
+	public void deleteById(java.lang.Integer id){
+		this.dao.removeByPk(BotOrderModel.class,id);
+	}
+	@Override
+	public BotOrderModel save(BotOrderModel model){
+		return this.dao.save(model);
+	}
+	@Override
+	public Collection<BotOrderModel> saveAll(Collection<BotOrderModel> models){
+		return this.dao.saveAll(models);
+	}
 
 	@Override
 	public BotOrderModel getByToUserId(String id,Integer status) {

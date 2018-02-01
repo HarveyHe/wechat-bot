@@ -10,10 +10,10 @@ public class MoLiRobot implements Robot {
 	private String apiUrl;
 
 	public MoLiRobot() {
-		String api_key = Constant.config.get("itpk.api_key");
-		String api_secret = Constant.config.get("itpk.api_secret");
-		if(StringKit.isNotBlank(api_key) && StringKit.isNotBlank(api_secret)){
-			this.apiUrl = Constant.ITPK_API + "?api_key=" + api_key + "&api_secret=" + api_secret;
+		String apiKey = Constant.config.get("itpk.api_key");
+		String apiSecret = Constant.config.get("itpk.api_secret");
+		if(StringKit.isNotBlank(apiKey) && StringKit.isNotBlank(apiSecret)){
+			this.apiUrl = Constant.ITPK_API + "?api_key=" + apiKey + "&api_secret=" + apiSecret;
 		}
 	}
 

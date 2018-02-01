@@ -16,33 +16,33 @@ import com.hao.bot.service.BotRechargeService;
 @Service
 public class BotRechargeServiceImpl extends BaseServiceImpl
               implements BotRechargeService {
-              
-   public BotRechargeModel get(java.lang.Integer id){
-       return this.dao.get(BotRechargeModel.class,id);
-   }
-    
-   public List<BotRechargeModel> findByExample(BotRechargeModel example,PagingInfo pagingInfo){
-       if(example == null){
-           example = new BotRechargeModel();
-       }
-       return this.dao.findByExample(example,null,pagingInfo);
-   }
-    
-   public void delete(BotRechargeModel model){
-       this.dao.remove(model);
-   }
-    
-   public void deleteById(java.lang.Integer id){
-       this.dao.removeByPk(BotRechargeModel.class,id);
-   }
-    
-   public BotRechargeModel save(BotRechargeModel model){
-       return this.dao.save(model);
-   }
-    
-   public Collection<BotRechargeModel> saveAll(Collection<BotRechargeModel> models){
-       return this.dao.saveAll(models);
-   }
+	@Override       
+	public BotRechargeModel get(java.lang.Integer id){
+		return this.dao.get(BotRechargeModel.class,id);
+	}
+	@Override
+	public List<BotRechargeModel> findByExample(BotRechargeModel example,PagingInfo pagingInfo){
+		if(example == null){
+			example = new BotRechargeModel();
+		}
+		return this.dao.findByExample(example,null,pagingInfo);
+	}
+	@Override
+	public void delete(BotRechargeModel model){
+		this.dao.remove(model);
+	}
+	@Override
+	public void deleteById(java.lang.Integer id){
+		this.dao.removeByPk(BotRechargeModel.class,id);
+	}
+	@Override
+	public BotRechargeModel save(BotRechargeModel model){
+		return this.dao.save(model);
+	}
+	@Override
+	public Collection<BotRechargeModel> saveAll(Collection<BotRechargeModel> models){
+		return this.dao.saveAll(models);
+	}
 
 	@Override
 	public List<BotRechargeModel> query(QueryRequestEntity entity) {

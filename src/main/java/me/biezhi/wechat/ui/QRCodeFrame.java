@@ -23,6 +23,7 @@ public class QRCodeFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -51,6 +52,7 @@ public class QRCodeFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel qrcodePanel = new JPanel(){
+			@Override
 			public void paintComponent(Graphics g) {
 				ImageIcon icon = new ImageIcon(filePath);
 				// 图片随窗体大小而变化

@@ -57,6 +57,7 @@ public class WechatRobot {
 
 		if (null != output && output.exists() && output.isFile()) {
 			EventQueue.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					try {
 						UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -99,21 +100,21 @@ public class WechatRobot {
 		if (null == code) {
 			throw new WechatException("扫描二维码验证失败");
 		} else {
-			if (code.equals("201")) {
+			if ("201".equals(code)) {
 				LOGGER.info("成功扫描,请在手机上点击确认以登录");
 				tip = 0;
-			} else if (code.equals("200")) {
+			} else if ("200".equals(code)) {
 				LOGGER.info("正在登录...");
 				String pm = Matchers.match("window.redirect_uri=\"(\\S+?)\";", res);
-				String redirect_uri = pm + "&fun=new";
-				wechatMeta.setRedirect_uri(redirect_uri);
+				String redirectUri = pm + "&fun=new";
+				wechatMeta.setRedirect_uri(redirectUri);
 				
-				String base_uri = redirect_uri.substring(0, redirect_uri.lastIndexOf("/"));
-				wechatMeta.setBase_uri(base_uri);
+				String baseUri = redirectUri.substring(0, redirectUri.lastIndexOf("/"));
+				wechatMeta.setBase_uri(baseUri);
 				
-				LOGGER.debug("redirect_uri={}", redirect_uri);
-				LOGGER.debug("base_uri={}", base_uri);
-			} else if (code.equals("408")) {
+				LOGGER.debug("redirect_uri={}", redirectUri);
+				LOGGER.debug("base_uri={}", baseUri);
+			} else if ("408".equals(code)) {
 				throw new WechatException("登录超时");
 			} else {
 				LOGGER.info("扫描code={}", code);

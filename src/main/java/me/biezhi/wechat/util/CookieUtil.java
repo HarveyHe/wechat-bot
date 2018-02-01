@@ -14,8 +14,9 @@ public class CookieUtil {
 		StringBuffer sBuffer = new StringBuffer();
 		for (Map.Entry<String, List<String>> entry : resHeaders.entrySet()) {
 			String name = entry.getKey();
-			if (name == null)
+			if (name == null){
 				continue; // http/1.1 line
+			}
 			List<String> values = entry.getValue();
 			if (name.equalsIgnoreCase("Set-Cookie")) {
 				for (String value : values) {

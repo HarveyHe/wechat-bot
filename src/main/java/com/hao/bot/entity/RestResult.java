@@ -40,17 +40,17 @@ public class RestResult<T> {
 	
 	private static RestResult<?> parse(JsonNode node) throws Exception {
 		RestResult<?> result = new RestResult<>();
-		JsonNode _node = node.get("code");
-		if(_node != null && _node.getNodeType() == JsonNodeType.NUMBER) {
-			result.setCode(_node.asInt());
+		JsonNode jsonNode = node.get("code");
+		if(jsonNode != null && jsonNode.getNodeType() == JsonNodeType.NUMBER) {
+			result.setCode(jsonNode.asInt());
 		}
-		_node = node.get("message");
-		if(_node != null && _node.getNodeType() == JsonNodeType.STRING) {
-			result.setMessage(_node.asText());
+		jsonNode = node.get("message");
+		if(jsonNode != null && jsonNode.getNodeType() == JsonNodeType.STRING) {
+			result.setMessage(jsonNode.asText());
 		}
-		_node = node.get("pagingInfo");
-		if(_node != null && _node.getNodeType() == JsonNodeType.OBJECT) {
-			PagingInfo pagingInfo = JSON.getObjectMapper().readValue(_node.traverse(), PagingInfo.class);
+		jsonNode = node.get("pagingInfo");
+		if(jsonNode != null && jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+			PagingInfo pagingInfo = JSON.getObjectMapper().readValue(jsonNode.traverse(), PagingInfo.class);
 			result.setPagingInfo(pagingInfo);
 		}
 		return result;
@@ -58,12 +58,12 @@ public class RestResult<T> {
 	
 	public static <T> RestResult<T> parse(String json,TypeReference<T> dataTypeRef) throws Exception {
 		JsonNode node = JSON.getObjectMapper().readTree(json);
-		if(node.getNodeType() != JsonNodeType.OBJECT) return null;
+		if(node.getNodeType() != JsonNodeType.OBJECT) {return null;}
 		@SuppressWarnings("unchecked")
 		RestResult<T> result = (RestResult<T>)parse(node);
-		JsonNode _node = node.get("data");
-		if(_node != null) {
-			T data = JSON.getObjectMapper().readValue(_node.traverse(), dataTypeRef);
+		JsonNode jsonNode = node.get("data");
+		if(jsonNode != null) {
+			T data = JSON.getObjectMapper().readValue(jsonNode.traverse(), dataTypeRef);
 			result.setData(data);
 		}
 		return result;
@@ -71,12 +71,12 @@ public class RestResult<T> {
 	
 	public static <T> RestResult<T> parse(String json,Class<T> clazz) throws Exception {
 		JsonNode node = JSON.getObjectMapper().readTree(json);
-		if(node.getNodeType() != JsonNodeType.OBJECT) return null;
+		if(node.getNodeType() != JsonNodeType.OBJECT) {return null;}
 		@SuppressWarnings("unchecked")
 		RestResult<T> result = (RestResult<T>)parse(node);
-		JsonNode _node = node.get("data");
-		if(_node != null) {
-			T data = JSON.getObjectMapper().readValue(_node.traverse(), clazz);
+		JsonNode jsonNode = node.get("data");
+		if(jsonNode != null) {
+			T data = JSON.getObjectMapper().readValue(jsonNode.traverse(), clazz);
 			result.setData(data);
 		}
 		return result;

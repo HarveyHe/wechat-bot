@@ -16,33 +16,33 @@ import com.hao.bot.service.PlayingRecordsService;
 @Service
 public class PlayingRecordsServiceImpl extends BaseServiceImpl
               implements PlayingRecordsService {
-              
-   public PlayingRecordsModel get(java.lang.Integer id){
-       return this.dao.get(PlayingRecordsModel.class,id);
-   }
-    
-   public List<PlayingRecordsModel> findByExample(PlayingRecordsModel example,PagingInfo pagingInfo){
-       if(example == null){
-           example = new PlayingRecordsModel();
-       }
-       return this.dao.findByExample(example,null,pagingInfo);
-   }
-    
-   public void delete(PlayingRecordsModel model){
-       this.dao.remove(model);
-   }
-    
-   public void deleteById(java.lang.Integer id){
-       this.dao.removeByPk(PlayingRecordsModel.class,id);
-   }
-    
-   public PlayingRecordsModel save(PlayingRecordsModel model){
-       return this.dao.save(model);
-   }
-    
-   public Collection<PlayingRecordsModel> saveAll(Collection<PlayingRecordsModel> models){
-       return this.dao.saveAll(models);
-   }
+	@Override      
+	public PlayingRecordsModel get(java.lang.Integer id){
+		return this.dao.get(PlayingRecordsModel.class,id);
+	}
+	@Override
+	public List<PlayingRecordsModel> findByExample(PlayingRecordsModel example,PagingInfo pagingInfo){
+		if(example == null){
+			example = new PlayingRecordsModel();
+		}
+		return this.dao.findByExample(example,null,pagingInfo);
+	}
+	@Override
+	public void delete(PlayingRecordsModel model){
+		this.dao.remove(model);
+	}
+	@Override
+	public void deleteById(java.lang.Integer id){
+		this.dao.removeByPk(PlayingRecordsModel.class,id);
+	}
+	@Override
+	public PlayingRecordsModel save(PlayingRecordsModel model){
+		return this.dao.save(model);
+	}
+	@Override
+	public Collection<PlayingRecordsModel> saveAll(Collection<PlayingRecordsModel> models){
+		return this.dao.saveAll(models);
+	}
 
 	@Override
 	public List<PlayingRecordsModel> query(QueryRequestEntity entity) {
