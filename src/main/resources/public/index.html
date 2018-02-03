@@ -52,10 +52,10 @@
     </nav>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
+  <aside class="main-sidebar" id="leftside">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- sidebar menu: : style can be found in sidebar.less -->
+    <!-- <section class="sidebar">
+      sidebar menu: : style can be found in sidebar.less
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         <li class="treeview">
@@ -72,8 +72,9 @@
         </li>
         
       </ul>
-    </section>
+    </section> -->
     <!-- /.sidebar -->
+    <leftside></leftside>
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -88,19 +89,51 @@
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
+		<div  class="col-xs-6">
+			<div class="box">
+				<div id="example-2">
+				  <simple-counter></simple-counter>
+				  <simple-counter></simple-counter>
+				  <simple-counter></simple-counter>
+				</div>
+			</div>
+		</div>	
       <div class="col-xs-6" id="rechargeApp">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">充值列表</h3>
-
+              <h3 class="box-title">充值列表
+              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+              </h3>
+              <form class="form-horizontal">
+		              
+	              <div class ="box-body">
+		              <div class="form-group col-xs-6  no-margin ">
+			              <label for="rechargeUserName" class="col-sm-5 control-label">用户名</label>
+		                  <div class="col-sm-7">
+		                    <input type="text" v-model="condition.userName" class="form-control" id="rechargeUserName">
+		                  </div>
+		              </div>
+		              <div class="form-group col-xs-6  no-margin ">
+		               	  <label for="rechargeStatus" class="col-sm-4 control-label">状态</label>
+		               	  <div class="col-sm-8">
+			                  <select class="form-control" id="rechargeStatus" v-model="condition.status">
+			                    <option value="">全部</option>
+			                    <option value="-1" >审核不通过</option>
+			                    <option value="0">待审核</option>
+			                    <option value="1">审核通过</option>
+			                  </select>
+		                  </div>
+		              </div>
+	              </div>
+              </form>
               <div class="box-tools">
-              	<div v-on:click="query" class="btn pull-left">查询</div>
+              	
                 <ul class="pagination pagination-sm no-margin pull-right">
-                  <li><a href="#" v-on:click="queryPage(paginationUI.prev)">&laquo;</a></li>
-                  <li v-for="paging in paginationUI.pagingList" >
-                  	<a href="#" v-on:click="queryPage(paging)">{{paging}}</a>
+                  <li  v-if="pagingInfo.pageNo  != paginationUI.prev"><a href="#" v-on:click="queryPage(paginationUI.prev)">&laquo;</a></li>
+                  <li v-for="paging in paginationUI.pagingList" v-if="pagingInfo.totalPages >  1">
+                  	<a href="#" v-on:click="queryPage(paging)" v-bind:class="[paging == pagingInfo.pageNo ? 'bg-aqua' : '']" >{{paging}}</a>
                   </li>
-                  <li><a href="#" v-on:click="queryPage(paginationUI.next)">&raquo;</a></li>
+                  <li v-if="pagingInfo.pageNo  != paginationUI.next"><a href="#" v-on:click="queryPage(paginationUI.next)">&raquo;</a></li>
                 </ul>
               </div>
             </div>
@@ -120,7 +153,12 @@
                     {{recharge.points}}
                   </td>
                   <td>
-                    {{recharge.status}}
+                 	<div class="btn-group" v-if="recharge.status == 0">
+                      <button type="button" class="btn btn-xs btn-info btn-danger" v-on:click="audit(recharge.rechargeId,-1)">不通过</button>
+                      <button type="button" class="btn btn-xs btn-info btn-success" v-on:click="audit(recharge.rechargeId,1)">通过</button>
+                    </div>
+                  	<div v-if="recharge.status == -1">审核不通过</div>
+                  	<div v-if="recharge.status ==1">审核通过</div>
                   </td>
                 </tr>
                 
@@ -132,7 +170,7 @@
 
           
         </div>
-
+		
 
     </section>
     <!-- /.content -->
@@ -159,76 +197,45 @@
 <script src="dist/js/adminlte.min.js"></script>
 
 <script src="js/vue.min.js"></script>
+<script src="js/bot.utils.js"></script>
+<script src="js/rechargeApp.js"></script>
+<!-- <script src="js/httpVueLoader.js"></script> -->
+<!-- <script src="template/component.js"></script> -->
+
+<script type="text/x-template" id="template_leftside" >
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+	  <!-- sidebar menu: : style can be found in sidebar.less -->
+	  <ul class="sidebar-menu" data-widget="tree">
+	    <li class="header" >MAIN NAVIGATION</li>
+	    <li class="treeview">
+	      <a href="#">
+	        <i class="fa fa-table"></i> <span>Tables</span>
+	        <span class="pull-right-container">
+	          <i class="fa fa-angle-left pull-right"></i>
+	        </span>
+	      </a>
+	      <ul class="treeview-menu">
+	        <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
+	        <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
+	      </ul>
+	    </li>
+	    
+	  </ul>
+	</section>
+	<!-- /.sidebar -->
+</script>
 <script>
 
+
 	$(function() {
-		window.rechargeApp = new Vue({
-			el : '#rechargeApp',
-			data : {
-				rechargelList : [],
-				pagingInfo : {
-    				"pageSize" : 10,
-    				"pageNo" : 1
-    			},
-    			condition : {},
-    			paginationUI :{
-    				prev:1,
-    				next:1,
-    				pagingList:[]
-    			}
-				
-			},
-			methods: {
-			    queryPage: function (pageNo) {
-			    	var _self = this;
-			    	_self.pagingInfo.pageNo = pageNo;
-			    	_self.query();
-			    },
-			    query: function () {
-			    	var _self = this;
-			    	var param = {
-			    		"request" : {
-			    			"pagingInfo" : _self.pagingInfo
-			    		}	
-			    	}
-			    	$.ajax({
-		                type : 'POST',
-		                url : "/hao/bot/api/query/rechargel.do",
-		                dataType : 'json',
-		　　　　　　　　  		contentType : 'application/json',
-		                data : JSON.stringify(param),
-		                beforeSend : function () {
-		                    // ....
-		                },
-		                success : function (result) { // 返回的RequestResult的json对象
-		                	console.log(result);
-		                	_self.rechargelList = result.data;
-		                	_self.pagingInfo = result.pagingInfo;
-		                	
-		                	var pageNo = _self.pagingInfo.pageNo;
-		                	var totalPages = _self.pagingInfo.totalPages;
-		                	_self.paginationUI.pagingList = [];
-		                	
-		                	var digitalDiff = totalPages - pageNo;
-		                	if(totalPages <= 5){
-		                		for (var i =1 ;i<= totalPages;i++ ){
-		                			_self.paginationUI.pagingList.push(i);
-		                		}
-		                	}else{
-		                		var size = pageNo + 4 > totalPages ? totalPages:pageNo + 4;
-		                		for (var i =pageNo ;i<= size ;i++ ){
-		                			_self.paginationUI.pagingList.push(i);
-		                		}
-		                	}
-		                	_self.paginationUI.prev = pageNo - 1 == 0?1:pageNo - 1;
-		                	_self.paginationUI.next = pageNo + 1 == totalPages?totalPages:pageNo + 1;
-		                
-		                },
-		            });
-			    }
-			
-			}
-		})
+		//左边菜单
+	    Vue.component("leftside", {
+		    template: "#template_leftside"
+		}); 
+	  	new Vue({
+		  el: '#leftside',
+		}) 
 	})
 	
 </script>

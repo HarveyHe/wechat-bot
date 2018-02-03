@@ -24,6 +24,5 @@ public interface BotRechargeService extends BaseService {
     
     List<BotRechargeModel> query(QueryRequestEntity entity);
     
-    Boolean audit(Integer id,Integer status);
     
 }

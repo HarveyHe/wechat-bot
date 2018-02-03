@@ -24,6 +24,5 @@ public interface BotExtractService extends BaseService {
     
     List<BotExtractModel> query(QueryRequestEntity entity);
     
-    Boolean audit(Integer id,Integer status);
     
 }

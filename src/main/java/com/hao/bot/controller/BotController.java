@@ -27,6 +27,7 @@ import com.hao.bot.service.BotExtractService;
 import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.service.BotOrderService;
 import com.hao.bot.service.BotRechargeService;
+import com.hao.bot.service.BotService;
 import com.hao.bot.service.PlayingRecordsService;
 import com.hao.bot.thread.MyThread;
 
@@ -48,6 +49,9 @@ public class BotController {
 	private BotIntegralService botIntegralService ;
 	@Autowired
 	private PlayingRecordsService playingRecordsService ;
+	
+	@Autowired
+	private BotService botService ;
 	
 	
 	
@@ -126,7 +130,7 @@ public class BotController {
 	public RestResult<String> auditExtract(@RequestBody CommonRequest<QueryRequestEntity>  request){
 		RestResult<String> result = new RestResult<>();
 		if(request.getRequest().getId() != null && request.getRequest().getStatus() != null){
-			botExtractService.audit(request.getRequest().getId(), request.getRequest().getStatus());
+			botService.auditExtrat(request.getRequest().getId(), request.getRequest().getStatus());
 			result.setCode(0);
 			result.setData("");
 		}else{
@@ -139,7 +143,7 @@ public class BotController {
 	public RestResult<String> auditRechargel(@RequestBody CommonRequest<QueryRequestEntity>  request){
 		RestResult<String> result = new RestResult<>();
 		if(request.getRequest().getId() != null && request.getRequest().getStatus() != null){
-			botRechargeService.audit(request.getRequest().getId(), request.getRequest().getStatus());
+			botService.auditRecharge(request.getRequest().getId(), request.getRequest().getStatus());
 			result.setCode(0);
 			result.setData("");
 		}else{
