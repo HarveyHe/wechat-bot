@@ -53,131 +53,400 @@
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar" id="leftside">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <!-- <section class="sidebar">
-      sidebar menu: : style can be found in sidebar.less
-      <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
+    
+    <div class="sidebar-menu" >
+	    <li class="">
+          <div v-on:click="start()" class="btn btn-block btn-default">启动机器人</div>
         </li>
-        
-      </ul>
-    </section> -->
-    <!-- /.sidebar -->
-    <leftside></leftside>
+	    
+        <div class="image " v-if="myCode == 0">
+          <img :src="imgUrl" class="img col-xs-12" >
+        </div>
+     </div>
+   <!--  <leftside></leftside> -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        <small>Control panel</small>
-      </h1>
-    </section>
 
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
-		<div  class="col-xs-6">
-			<div class="box">
-				<div id="example-2">
-				  <simple-counter></simple-counter>
-				  <simple-counter></simple-counter>
-				  <simple-counter></simple-counter>
+
+		<div class="nav-tabs-custom">
+			<!-- Tabs within a box -->
+			<ul class="nav nav-tabs pull-right">
+				<li class="active"><a href="#revenue-chart" data-toggle="tab">审核管理</a></li>
+				<li><a href="#sales-chart" data-toggle="tab">积分列表</a></li>
+				<li><a href="#order-records" data-toggle="tab">下单记录</a></li>
+				<li class="pull-left header"><i class="fa fa-inbox"></i> 管理</li>
+			</ul>
+			<div class="tab-content no-padding">
+				<!-- Morris chart - Sales -->
+				<div class="chart tab-pane active" id="revenue-chart"
+					style="position: relative;">
+					
+					 <!-- rechargeApp start-->
+				      <div class="col-xs-6" id="rechargeApp">
+				          <div class="box">
+				            <div class="box-header">
+				              <h3 class="box-title">充值列表
+				              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+				              </h3>
+				              <form class="form-horizontal">
+						              
+					              <div class ="box-body">
+						              <div class="form-group col-xs-6  no-margin ">
+							              <label for="rechargeUserName" class="col-sm-5 control-label">用户名</label>
+						                  <div class="col-sm-7">
+						                    <input type="text" v-model="condition.userName" class="form-control" id="rechargeUserName">
+						                  </div>
+						              </div>
+						              <div class="form-group col-xs-6  no-margin ">
+						               	  <label for="rechargeStatus" class="col-sm-4 control-label">状态</label>
+						               	  <div class="col-sm-8">
+							                  <select class="form-control" id="rechargeStatus" v-model="condition.status">
+							                    <option value="">全部</option>
+							                    <option value="-1" >审核不通过</option>
+							                    <option value="0">待审核</option>
+							                    <option value="1">审核通过</option>
+							                  </select>
+						                  </div>
+						              </div>
+					              </div>
+				              </form>
+				              <div class="box-tools">
+				              	<mypaginginfo 
+				            			v-bind:paging-list="paginationUi.pagingList" 
+				            			v-bind:pagination-ui="paginationUi" 
+										v-bind:paging-info="pagingInfo"></mypaginginfo>
+				              </div>
+				            </div>
+				            <!-- /.box-header -->
+				            <div class="box-body no-padding">
+				              <table id="example1"  class="table table-bordered table-striped">
+				                <tr>
+				                  <th style="width: 10px">#</th>
+				                  <th>用户名</th>
+				                  <th>充值分数</th>
+				                  <th >状态</th>
+				                </tr>
+				                <tr v-for="recharge in rechargeList" >
+				                  <td>{{recharge.rechargeId}}</td>
+				                  <td>{{recharge.userName}}</td>
+				                  <td>
+				                    {{recharge.points}}
+				                  </td>
+				                  <td>
+				                 	<div class="btn-group" v-if="recharge.status == 0">
+				                      <button type="button" class="btn btn-xs btn-info btn-danger" v-on:click="audit(recharge.rechargeId,-1)">不通过</button>
+				                      <button type="button" class="btn btn-xs btn-info btn-success" v-on:click="audit(recharge.rechargeId,1)">通过</button>
+				                    </div>
+				                  	<div v-if="recharge.status == -1">审核不通过</div>
+				                  	<div v-if="recharge.status ==1">审核通过</div>
+				                  </td>
+				                </tr>
+				                
+				              </table>
+				            </div>
+				            <!-- /.box-body -->
+				          </div>
+				          <!-- /.box -->
+				
+				          
+				        </div>
+				        <!-- /rechargeApp end-->
+				        
+				      <!-- extractApp start-->
+				      <div class="col-xs-6" id="extractApp">
+				          <div class="box">
+				            <div class="box-header">
+				              <h3 class="box-title">提取分列表
+				              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+				              </h3>
+				              <form class="form-horizontal">
+						              
+					              <div class ="box-body">
+						              <div class="form-group col-xs-6  no-margin ">
+							              <label for="extractUserName" class="col-sm-5 control-label">用户名</label>
+						                  <div class="col-sm-7">
+						                    <input type="text" v-model="condition.userName" class="form-control" id="extractUserName">
+						                  </div>
+						              </div>
+						              <div class="form-group col-xs-6  no-margin ">
+						               	  <label for="extractStatus" class="col-sm-4 control-label">状态</label>
+						               	  <div class="col-sm-8">
+							                  <select class="form-control" id="extractStatus" v-model="condition.status">
+							                    <option value="">全部</option>
+							                    <option value="-1" >审核不通过</option>
+							                    <option value="0">待审核</option>
+							                    <option value="1">审核通过</option>
+							                  </select>
+						                  </div>
+						              </div>
+					              </div>
+				              </form>
+				              <div class="box-tools">
+				              	
+				                <mypaginginfo 
+				            			v-bind:paging-list="paginationUi.pagingList" 
+				            			v-bind:pagination-ui="paginationUi" 
+										v-bind:paging-info="pagingInfo"></mypaginginfo>
+				              </div>
+				            </div>
+				            <!-- /.box-header -->
+				            <div class="box-body no-padding">
+				              <table id="example1"  class="table table-bordered table-striped">
+				                <tr>
+				                  <th style="width: 10px">#</th>
+				                  <th>用户名</th>
+				                  <th>充值分数</th>
+				                  <th >状态</th>
+				                </tr>
+				                <tr v-for="extract in extractList" >
+				                  <td>{{extract.extractId}}</td>
+				                  <td>{{extract.userName}}</td>
+				                  <td>
+				                    {{extract.points}}
+				                  </td>
+				                  <td>
+				                 	<div class="btn-group" v-if="extract.status == 0">
+				                      <button type="button" class="btn btn-xs btn-info btn-danger" v-on:click="audit(extract.extractId,-1)">不通过</button>
+				                      <button type="button" class="btn btn-xs btn-info btn-success" v-on:click="audit(extract.extractId,1)">通过</button>
+				                    </div>
+				                  	<div v-if="extract.status == -1">审核不通过</div>
+				                  	<div v-if="extract.status ==1">审核通过</div>
+				                  </td>
+				                </tr>
+				                
+				              </table>
+				            </div>
+				            <!-- /.box-body -->
+				          </div>
+				          <!-- /.box -->
+				
+				          
+				        </div>
+				        <!-- /extractApp end-->
+					
+				</div>
+				<div class="chart tab-pane" id="sales-chart"
+					style="position: relative;">
+					
+					<!-- integralApp start-->
+				      <div class="col-xs-6" id="integralApp">
+				          <div class="box">
+				            <div class="box-header">
+				              <h3 class="box-title">剩余积分列表
+				              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+				              </h3>
+				              <form class="form-horizontal">
+						              
+					              <div class ="box-body">
+						              <div class="form-group col-xs-6  no-margin ">
+							              <label for="integralUserName" class="col-sm-5 control-label">用户名</label>
+						                  <div class="col-sm-7">
+						                    <input type="text" v-model="condition.userName" class="form-control" id="integralUserName">
+						                  </div>
+						              </div>
+					              </div>
+				              </form>
+				              <div class="box-tools">
+				              	
+				                <mypaginginfo 
+				            			v-bind:paging-list="paginationUi.pagingList" 
+				            			v-bind:pagination-ui="paginationUi" 
+										v-bind:paging-info="pagingInfo"></mypaginginfo>
+				              </div>
+				            </div>
+				            <!-- /.box-header -->
+				            <div class="box-body no-padding">
+				              <table id="example1"  class="table table-bordered table-striped">
+				                <tr>
+				                  <th style="width: 10px">#</th>
+				                  <th>用户名</th>
+				                  <th>剩余分数</th>
+				                </tr>
+				                <tr v-for="integral in integralList" >
+				                  <td>{{integral.integralId}}</td>
+				                  <td>{{integral.userName}}</td>
+				                  <td>
+				                    {{integral.remainingPoints}}
+				                  </td>
+				                </tr>
+				                
+				              </table>
+				            </div>
+				            <!-- /.box-body -->
+				          </div>
+				          <!-- /.box -->
+				
+				          
+				        </div>
+				        <!-- /integralApp end-->
+				</div>
+				
+				<div class="tab-pane" id="order-records"
+					style="position: relative;">
+					
+					<!-- recordsApp start-->
+				      <div class="col-xs-6" id="recordsApp">
+				          <div class="box">
+				            <div class="box-header">
+				              <h3 class="box-title">期数列表
+				              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+				              </h3>
+				              <form class="form-horizontal">
+						              
+					              <div class ="box-body">
+						              <div class="form-group col-xs-6  no-margin ">
+							              <label for="recordsUserName" class="col-sm-5 control-label">用户名</label>
+						                  <div class="col-sm-7">
+						                    <input type="text" v-model="condition.userName" class="form-control" id="recordsUserName">
+						                  </div>
+						              </div>
+					              </div>
+				              </form>
+				              <div class="box-tools">
+				              	
+				                <mypaginginfo 
+				            			v-bind:paging-list="paginationUi.pagingList" 
+				            			v-bind:pagination-ui="paginationUi" 
+										v-bind:paging-info="pagingInfo"></mypaginginfo>
+				              </div>
+				            </div>
+				            <!-- /.box-header -->
+				            <div class="box-body no-padding">
+				              <table id="example1"  class="table table-bordered table-striped">
+				                <tr>
+				                  <th style="width: 10px">#</th>
+				                  <th>期数</th>
+				                  <th>注1</th>
+				                  <th>注2</th>
+				                  <th>注3</th>
+				                  <th>注4</th>
+				                  <th>注5</th>
+				                  <th>注6</th>
+				                  <th>注7</th>
+				                  <th>注8</th>
+				                  <th>注9</th>
+				                  <th>注10</th>
+				                </tr>
+				                <tr v-for="records in recordsList" >
+				                  <td>{{records.playingRecordsId}}</td>
+				                  <td>{{records.playingNo}}</td>
+				                  <td>
+				                    {{records.record1}}
+				                  </td>
+				                  <td>
+				                    {{records.record2}}
+				                  </td>
+				                  <td>
+				                    {{records.record3}}
+				                  </td>
+				                  <td>
+				                    {{records.record4}}
+				                  </td>
+				                  <td>
+				                    {{records.record5}}
+				                  </td>
+				                  <td>
+				                    {{records.record6}}
+				                  </td>
+				                  <td>
+				                    {{records.record7}}
+				                  </td>
+				                  <td>
+				                    {{records.record8}}
+				                  </td>
+				                  <td>
+				                    {{records.record9}}
+				                  </td>
+				                  <td>
+				                    {{records.record10}}
+				                  </td>
+				                </tr>
+				                
+				              </table>
+				            </div>
+				            <!-- /.box-body -->
+				          </div>
+				          <!-- /.box -->
+				
+				          
+				        </div>
+				        <!-- /recordsApp end-->
+				        
+				        
+					<!-- orderApp start-->
+				      <div class="col-xs-6" id="orderApp">
+				          <div class="box">
+				            <div class="box-header">
+				              <h3 class="box-title">下注列表
+				              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
+				              </h3>
+				              <form class="form-horizontal">
+						              
+					              <div class ="box-body">
+						              <div class="form-group col-xs-6  no-margin ">
+							              <label for="orderUserName" class="col-sm-5 control-label">用户名</label>
+						                  <div class="col-sm-7">
+						                    <input type="text" v-model="condition.userName" class="form-control" id="orderUserName">
+						                  </div>
+						              </div>
+					              </div>
+				              </form>
+				              <div class="box-tools">
+				              	
+				                <mypaginginfo 
+				            			v-bind:paging-list="paginationUi.pagingList" 
+				            			v-bind:pagination-ui="paginationUi" 
+										v-bind:paging-info="pagingInfo"></mypaginginfo>
+				              </div>
+				            </div>
+				            <!-- /.box-header -->
+				            <div class="box-body no-padding">
+				              <table id="example1"  class="table table-bordered table-striped">
+				                <tr>
+				                  <th style="width: 10px">#</th>
+				                  <th>用户名</th>
+				                  <th>下注</th>
+				                  <th>下注分数</th>
+				                  <th>下注期数</th>
+				                </tr>
+				                <tr v-for="order in orderList" >
+				                  <td>{{order.orderId}}</td>
+				                  <td>{{order.userName}}</td>
+				                  <td>
+				                    {{order.record}}
+				                  </td>
+				                  <td>
+				                    {{order.points}}
+				                  </td>
+				                  <td>
+				                    {{order.playingNo}}
+				                  </td>
+				                </tr>
+				                
+				              </table>
+				            </div>
+				            <!-- /.box-body -->
+				          </div>
+				          <!-- /.box -->
+				
+				          
+				        </div>
+				        <!-- /orderApp end-->
 				</div>
 			</div>
-		</div>	
-      <div class="col-xs-6" id="rechargeApp">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">充值列表
-              	<div v-on:click="queryPage(1)" class="btn bg-purple margin btn-xs no-margin">查询</div>
-              </h3>
-              <form class="form-horizontal">
-		              
-	              <div class ="box-body">
-		              <div class="form-group col-xs-6  no-margin ">
-			              <label for="rechargeUserName" class="col-sm-5 control-label">用户名</label>
-		                  <div class="col-sm-7">
-		                    <input type="text" v-model="condition.userName" class="form-control" id="rechargeUserName">
-		                  </div>
-		              </div>
-		              <div class="form-group col-xs-6  no-margin ">
-		               	  <label for="rechargeStatus" class="col-sm-4 control-label">状态</label>
-		               	  <div class="col-sm-8">
-			                  <select class="form-control" id="rechargeStatus" v-model="condition.status">
-			                    <option value="">全部</option>
-			                    <option value="-1" >审核不通过</option>
-			                    <option value="0">待审核</option>
-			                    <option value="1">审核通过</option>
-			                  </select>
-		                  </div>
-		              </div>
-	              </div>
-              </form>
-              <div class="box-tools">
-              	
-                <ul class="pagination pagination-sm no-margin pull-right">
-                  <li  v-if="pagingInfo.pageNo  != paginationUI.prev"><a href="#" v-on:click="queryPage(paginationUI.prev)">&laquo;</a></li>
-                  <li v-for="paging in paginationUI.pagingList" v-if="pagingInfo.totalPages >  1">
-                  	<a href="#" v-on:click="queryPage(paging)" v-bind:class="[paging == pagingInfo.pageNo ? 'bg-aqua' : '']" >{{paging}}</a>
-                  </li>
-                  <li v-if="pagingInfo.pageNo  != paginationUI.next"><a href="#" v-on:click="queryPage(paginationUI.next)">&raquo;</a></li>
-                </ul>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <table id="example1"  class="table table-bordered table-striped">
-                <tr>
-                  <th style="width: 10px">#</th>
-                  <th>用户名</th>
-                  <th>充值分数</th>
-                  <th >状态</th>
-                </tr>
-                <tr v-for="recharge in rechargelList" >
-                  <td>{{recharge.rechargeId}}</td>
-                  <td>{{recharge.userName}}</td>
-                  <td>
-                    {{recharge.points}}
-                  </td>
-                  <td>
-                 	<div class="btn-group" v-if="recharge.status == 0">
-                      <button type="button" class="btn btn-xs btn-info btn-danger" v-on:click="audit(recharge.rechargeId,-1)">不通过</button>
-                      <button type="button" class="btn btn-xs btn-info btn-success" v-on:click="audit(recharge.rechargeId,1)">通过</button>
-                    </div>
-                  	<div v-if="recharge.status == -1">审核不通过</div>
-                  	<div v-if="recharge.status ==1">审核通过</div>
-                  </td>
-                </tr>
-                
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
+		</div>
 
-          
-        </div>
-		
-
-    </section>
+	</section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-  </footer>
+<!--   <footer class="main-footer">
+  </footer> -->
 
 </div>
 <!-- ./wrapper -->
@@ -199,6 +468,10 @@
 <script src="js/vue.min.js"></script>
 <script src="js/bot.utils.js"></script>
 <script src="js/rechargeApp.js"></script>
+<script src="js/extractApp.js"></script>
+<script src="js/integralApp.js"></script>
+<script src="js/orderApp.js"></script>
+<script src="js/recordsApp.js"></script>
 <!-- <script src="js/httpVueLoader.js"></script> -->
 <!-- <script src="template/component.js"></script> -->
 
@@ -225,6 +498,15 @@
 	</section>
 	<!-- /.sidebar -->
 </script>
+<script type="text/x-template" id="template_pagingInfo" >
+<ul class="pagination pagination-sm no-margin pull-right" v-if="pagingInfo.totalPages >0">
+    <li  v-if="pagingInfo.pageNo  != paginationUi.prev"><a href="#" v-on:click="queryPage(paginationUi.prev)">&laquo;</a></li>
+    <li v-for="paging in pagingList" v-if="pagingInfo.totalPages >  1">
+        <a href="#" v-on:click="queryPage(paging)" v-bind:class="[paging == pagingInfo.pageNo ? 'bg-aqua' : '']" >{{paging}}</a>
+    </li>
+    <li v-if="pagingInfo.pageNo  != paginationUi.next"><a href="#" v-on:click="queryPage(paginationUi.next)">&raquo;</a></li>
+</ul>
+</script>
 <script>
 
 
@@ -234,8 +516,41 @@
 		    template: "#template_leftside"
 		}); 
 	  	new Vue({
-		  el: '#leftside',
+			  el: '#leftside',
+			  data : {
+					myCode:-1,
+					imgUrl : ""
+			},
+			methods: {
+			    start: function () {
+			    	var _self = this;
+			    	var param = {
+			    		
+			    	}
+			    	$bot.post("/hao/bot/api/start.do",param,function(result){
+	                	_self.myCode = result.code;
+	                	_self.imgUrl = result.data;
+	                	
+			    	});
+			    },
+			    
+			
+			}
 		}) 
+	  	
+	  	//分页
+	  	Vue.component('mypaginginfo', {
+	  	  // 在 JavaScript 中使用 camelCase
+	  	  props: ['pagingInfo',"paginationUi","pagingList"],
+	  	  template: '#template_pagingInfo',
+	  	   methods: {
+		  		 queryPage: function (pageNo) {
+		  			this.$parent.queryPage(pageNo);
+		  	    }
+	  	  }
+	  	})
+	  	
+	  	
 	})
 	
 </script>

@@ -1,12 +1,12 @@
 $(function() {
 
 	/**
-	 * 提取分管理
+	 * 期数管理
 	 */
-	window.extractApp = new Vue({
-		el : '#extractApp',
+	window.recordsApp = new Vue({
+		el : '#recordsApp',
 		data : {
-			extractList : [],
+			recordsList : [],
 			pagingInfo : {
 				pageSize : 8,
 				pageNo : 1
@@ -34,26 +34,14 @@ $(function() {
 					request : _self.condition
 				}
 				param.request.pagingInfo = _self.pagingInfo;
-				$bot.post("/hao/bot/api/query/extract.do", param, function(
+				$bot.post("/hao/bot/api/query/playing/records.do", param, function(
 						result) {
-					_self.extractList = result.data;
+					_self.recordsList = result.data;
 					_self.pagingInfo = result.pagingInfo;
+					console.log(_self.pagingInfo)
 					_self.paginationUi = $bot.setPaginationUi(_self.pagingInfo,
 							_self.paginationUi.pagingList);
-
-				});
-			},
-			audit : function(id, status) {
-				var _self = this;
-				var param = {
-					request : {
-						id : id,
-						status : status
-					}
-				}
-				$bot.post("/hao/bot/api/audit/extract.do", param, function(
-						result) {
-					_self.query();
+					console.log(_self.paginationUi)
 
 				});
 			}
@@ -61,5 +49,5 @@ $(function() {
 		}
 	})
 
-	window.extractApp.queryPage(1);
+	window.recordsApp.queryPage(1);
 })

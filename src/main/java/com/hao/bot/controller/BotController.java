@@ -107,8 +107,8 @@ public class BotController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/query/rechargel.do",method = { RequestMethod.POST ,RequestMethod.GET}, produces = "application/json")
-	public RestResult<List<BotRechargeModel>> queryRechargel(@RequestBody CommonRequest<QueryRequestEntity>  request){
+	@RequestMapping(value = "/query/recharge.do",method = { RequestMethod.POST ,RequestMethod.GET}, produces = "application/json")
+	public RestResult<List<BotRechargeModel>> queryRecharge(@RequestBody CommonRequest<QueryRequestEntity>  request){
 		RestResult<List<BotRechargeModel>> result = new RestResult<>();
 		result.setCode(0);
 		result.setData(botRechargeService.query(request.getRequest()));
@@ -139,8 +139,8 @@ public class BotController {
 		}
 		return result;
 	}
-	@RequestMapping(value = "/audit/rechargel.do",method = { RequestMethod.POST ,RequestMethod.GET})
-	public RestResult<String> auditRechargel(@RequestBody CommonRequest<QueryRequestEntity>  request){
+	@RequestMapping(value = "/audit/recharge.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	public RestResult<String> auditRecharge(@RequestBody CommonRequest<QueryRequestEntity>  request){
 		RestResult<String> result = new RestResult<>();
 		if(request.getRequest().getId() != null && request.getRequest().getStatus() != null){
 			botService.auditRecharge(request.getRequest().getId(), request.getRequest().getStatus());

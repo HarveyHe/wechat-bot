@@ -29,13 +29,13 @@
      * 
      * pagingList 原分页数组 每组最多显示5个页面按钮
      */
-    $bot.setPaginationUI =function(pagingInfo,pagingList){
-    	var paginationUI = {};
+    $bot.setPaginationUi =function(pagingInfo,pagingList){
+    	var paginationUi = {};
     	
     	var pageNo = pagingInfo.pageNo;
     	var totalPages = pagingInfo.totalPages;
     	
-    	paginationUI.pagingList = [];
+    	paginationUi.pagingList = [];
     	if( $.inArray(pageNo,pagingList) == -1){
     		
     		var digitalDiff = totalPages - pageNo;
@@ -57,15 +57,15 @@
     			}
     		}
     		for (var i = startIndex ;i<= endIndex ;i++ ){
-    			paginationUI.pagingList.push(i);
+    			paginationUi.pagingList.push(i);
     		}
     	}else{
-    		paginationUI.pagingList = pagingList;
+    		paginationUi.pagingList = pagingList;
     	}
     	
-    	paginationUI.prev = pageNo - 1 == 0?1:pageNo - 1;
-    	paginationUI.next = pageNo + 1 == totalPages + 1?totalPages:pageNo + 1;
-    	return paginationUI;
+    	paginationUi.prev = pageNo - 1 == 0?1:pageNo - 1;
+    	paginationUi.next = pageNo + 1 == totalPages + 1?totalPages:pageNo + 1;
+    	return paginationUi;
     }
     
     //为全局对象绑定$bot

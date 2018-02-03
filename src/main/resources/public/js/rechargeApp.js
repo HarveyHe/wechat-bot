@@ -6,8 +6,9 @@ $(function() {
 	window.rechargeApp = new Vue({
 		el : '#rechargeApp',
 		data : {
-			rechargelList : [],
+			rechargeList : [],
 			pagingInfo : {
+				totalPages:0,
 				pageSize : 8,
 				pageNo : 1
 			},
@@ -15,7 +16,7 @@ $(function() {
 				userName : "",
 				status : null
 			},
-			paginationUI :{
+			paginationUi :{
 				prev:1,
 				next:1,
 				pagingList:[]
@@ -34,10 +35,10 @@ $(function() {
 		    		request : _self.condition
 		    	}
 		    	param.request.pagingInfo = _self.pagingInfo;
-		    	$bot.post("/hao/bot/api/query/rechargel.do",param,function(result){
-                	_self.rechargelList = result.data;
+		    	$bot.post("/hao/bot/api/query/recharge.do",param,function(result){
+                	_self.rechargeList = result.data;
                 	_self.pagingInfo = result.pagingInfo;
-                	_self.paginationUI = $bot.setPaginationUI(_self.pagingInfo,_self.paginationUI.pagingList);
+                	_self.paginationUi = $bot.setPaginationUi(_self.pagingInfo,_self.paginationUi.pagingList);
                 	
 		    	});
 		    },
@@ -49,7 +50,7 @@ $(function() {
 		    			status:status
 		    		}
 		    	}
-		    	$bot.post("/hao/bot/api/audit/rechargel.do",param,function(result){
+		    	$bot.post("/hao/bot/api/audit/recharge.do",param,function(result){
                 	_self.query();
                 	
 		    	});
