@@ -61,12 +61,15 @@ public class HaoBotJob {
 	public void endOrd() {  
 		Date currentDate = new Date();
 		HbConstant.endTime = currentDate;
-		com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
-		WechatMeta wechatMeta = Constant.WECHAT_META;
-		JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
-		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "停止下注");	
-		//结算
-		this.settleResult();
+		if(HbConstant.currentPaylingRecordId != null){
+			
+			com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
+			WechatMeta wechatMeta = Constant.WECHAT_META;
+			JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
+			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "停止下注");	
+			//结算
+			this.settleResult();
+		}
 	}
 	
 	/**
@@ -133,6 +136,8 @@ public class HaoBotJob {
 			msg.append(":[");
 			msg.append(maxEntity.getRecordValue());
 			msg.append("]\n");
+			msg.append("总下注单数:");
+			msg.append(orders.size());
 			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), msg.toString());	
 			msg = new StringBuilder();
 			msg.append("获胜者：\n");
