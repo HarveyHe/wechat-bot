@@ -159,11 +159,11 @@
 		    <artifactId>wechat-api</artifactId>
 		    <version>1.0.5</version>
 		</dependency>
-        <!-- <dependency>
+        <dependency>
 		    <groupId>io.github.biezhi</groupId>
 		    <artifactId>elves</artifactId>
 		    <version>0.0.2</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -191,6 +191,15 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

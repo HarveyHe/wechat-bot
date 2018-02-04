@@ -24,7 +24,6 @@ public class MyThread extends Thread {
 				e.printStackTrace();
 			}
 		}
-//		wechatRobot.closeQrWindow();
 		wechatRobot.start();
     }
 

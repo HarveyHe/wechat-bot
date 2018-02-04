@@ -6,6 +6,7 @@ import java.util.List;
 import com.blade.kit.base.Config;
 
 import me.biezhi.wechat.model.WechatContact;
+import me.biezhi.wechat.model.WechatMeta;
 
 public class Constant {
 
@@ -37,4 +38,6 @@ public class Constant {
 	
 	// 全局配置文件
 	public static Config config;
+	
+	public static WechatMeta WECHAT_META;
 }

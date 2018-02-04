@@ -443,7 +443,7 @@ public class WechatServiceImpl implements WechatService {
 				if (Constant.FILTER_USERS.contains(msg.getString("ToUserName"))) {
 					continue;
 				} else if (msg.getString("FromUserName").equals(wechatMeta.getUser().getString("UserName"))) {
-					if(name.equals("重要的测试群")){
+					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
 						String[] peopleContent = content.split(":<br/>");
 						String toSendName = this.getUserRemarkName(peopleContent[0]);
 						String message = "自动回复：" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
@@ -456,7 +456,7 @@ public class WechatServiceImpl implements WechatService {
 					String[] peopleContent = content.split(":<br/>");
 					LOGGER.info("|" + name + "| " + peopleContent[0] + ":\n" + peopleContent[1].replace("<br/>", "\n"));
 				} else {
-					if(name.equals("重要的测试群")){
+					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
 						String[] peopleContent = content.split(":<br/>");
 						String toSendName = this.getUserRemarkName(peopleContent[0]);
 //						String message = "自动回复：@" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");

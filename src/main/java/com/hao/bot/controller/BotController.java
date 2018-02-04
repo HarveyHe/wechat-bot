@@ -2,6 +2,7 @@ package com.hao.bot.controller;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blade.kit.base.Config;
+import com.blade.kit.json.JSONObject;
+import com.gsst.eaf.core.context.Context;
 import com.hao.bot.entity.CommonRequest;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.entity.RestResult;
@@ -28,11 +31,14 @@ import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.service.BotOrderService;
 import com.hao.bot.service.BotRechargeService;
 import com.hao.bot.service.BotService;
+import com.hao.bot.service.BotWechatApiService;
 import com.hao.bot.service.PlayingRecordsService;
 import com.hao.bot.thread.MyThread;
 
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.WechatRobot;
+import me.biezhi.wechat.model.WechatContact;
+import me.biezhi.wechat.model.WechatMeta;
 
 @RestController
 @RequestMapping("/api")
@@ -152,4 +158,33 @@ public class BotController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/send/message.do",method = { RequestMethod.POST ,RequestMethod.GET})
+	public RestResult<String> sendMessage(HttpServletRequest request, HttpServletResponse response){
+		RestResult<String> result = new RestResult<>();
+		WechatMeta wechatMeta = Constant.WECHAT_META;
+		WechatContact wechatContact = Constant.CONTACT;
+		
+		Map<String, JSONObject> groupMap = wechatContact.getGroupMap();
+		
+		JSONObject contact = null;
+		for (Map.Entry<String,JSONObject> entry : groupMap.entrySet()) {
+//			String key = entry.getKey();
+			contact = entry.getValue();
+			if(contact.getString("NickName").equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
+				break;
+			}
+		}
+		com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
+//		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "测试主动发信息");
+		botWechatApiService.sendImg(wechatMeta,contact.getString("UserName"), "/public/image/start.gif");
+		System.out.println(contact);
+		
+		result.setCode(0);
+		result.setData("");
+		return result;
+	}
+	
+	
+	
 }

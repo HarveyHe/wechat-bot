@@ -12,6 +12,8 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.http.HttpRequest;
 import com.blade.kit.json.JSONObject;
+import com.gsst.eaf.core.context.Context;
+import com.hao.bot.service.BotWechatApiService;
 
 import me.biezhi.wechat.exception.WechatException;
 import me.biezhi.wechat.listener.WechatListener;
@@ -183,6 +185,8 @@ public class WechatRobot {
 		
 		// 监听消息
 		wechatListener.start(wechatService, wechatMeta);
+		
+		Constant.WECHAT_META = wechatMeta;
 	}
 	
 }

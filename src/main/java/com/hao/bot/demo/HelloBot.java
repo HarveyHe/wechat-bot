@@ -46,7 +46,9 @@ public class HelloBot extends WeChatBot {
     }
     
     public static void main(String[] args) {
-        new HelloBot(Config.me().autoLogin(true).showTerminal(true)).start();
+    	HelloBot helloBot = new HelloBot(Config.me().autoLogin(true).showTerminal(true));
+    	helloBot.start();
+//    	helloBot.sendImgName(name, imgPath)
     }
     
 }
