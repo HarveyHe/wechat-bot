@@ -21,5 +21,6 @@ public class HbConstant {
 	 * 当前期数
 	 */
 	public static String currentPaylingNo;
+	
 	public static Integer currentPaylingRecordId;
 }

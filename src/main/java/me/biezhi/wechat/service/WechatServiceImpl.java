@@ -31,9 +31,6 @@ public class WechatServiceImpl implements WechatService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WechatService.class);
 	
-	// 茉莉机器人
-	private Robot robot = new MoLiRobot();
-	
 	/**
 	 * 获取联系人
 	 */
@@ -459,7 +456,9 @@ public class WechatServiceImpl implements WechatService {
 				} else {
 					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
 						String[] peopleContent = content.split(":<br/>");
-						String toSendName = this.getUserRemarkName(peopleContent[0]);
+//						String toSendName = this.getUserRemarkName(peopleContent[0]);
+						String toSendName = this.getUserRemarkNameByGroup(msg.getString("FromUserName"), peopleContent[0]);
+						
 						String message = new GroudMessageHandler(peopleContent[0],toSendName, peopleContent[1]).handler();
 						if(StringUtils.isNotBlank(message)){
 							webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
@@ -522,13 +521,16 @@ public class WechatServiceImpl implements WechatService {
 		String name = "这个人物名字未知";
 		Map<String, JSONObject> groupMap = Constant.CONTACT.getGroupMap();
 		
-		JSONObject contact = null;
-		for (Map.Entry<String,JSONObject> entry : groupMap.entrySet()) {
-			String key = entry.getKey();
-			if(groudId.equals(key)){
-				contact = entry.getValue();
-				name = contact.getString("NickName");
-				break;
+		JSONObject group = groupMap.get(groudId);
+		if(group != null){
+			JSONArray groupList =group.get("MemberList").asArray();
+			JSONObject contact = null;
+			for (int i = 0, len = groupList.size(); i < len; i++) {
+				contact = (JSONObject) groupList.get(i);
+				if(contact.getString("UserName").equals(userId)){
+					name = contact.getString("NickName");
+					break;
+				}
 			}
 		}
 		return name;
