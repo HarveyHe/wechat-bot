@@ -52,7 +52,7 @@ public class HaoBotJob {
 		com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
 		WechatMeta wechatMeta = Constant.WECHAT_META;
 		JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
-		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "开始下注");
+		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n开始下注\n=================\n");
 		
 	}
 	/**
@@ -66,7 +66,7 @@ public class HaoBotJob {
 			com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
 			WechatMeta wechatMeta = Constant.WECHAT_META;
 			JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
-			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "停止下注");	
+			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n停止下注\n=================");	
 			//结算
 			this.settleResult();
 		}

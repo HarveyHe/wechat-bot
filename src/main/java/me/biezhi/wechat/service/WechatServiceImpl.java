@@ -443,13 +443,14 @@ public class WechatServiceImpl implements WechatService {
 				if (Constant.FILTER_USERS.contains(msg.getString("ToUserName"))) {
 					continue;
 				} else if (msg.getString("FromUserName").equals(wechatMeta.getUser().getString("UserName"))) {
-					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
-						String[] peopleContent = content.split(":<br/>");
-						String toSendName = this.getUserRemarkName(peopleContent[0]);
-						String message = "自动回复：" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
-						webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
+					//自己发的信息
+					if(toUserName.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
+						String message = new GroudMessageHandler(msg.getString("FromUserName"),wechatMeta.getUser().getString("NickName"), content).handler();
+						if(StringUtils.isNotBlank(message)){
+							
+							webwxsendmsg(wechatMeta, message, msg.getString("ToUserName"));
+						}
 						
-						LOGGER.info(name + ": " + content);
 					}
 					continue;
 				} else if (msg.getString("ToUserName").indexOf("@@") != -1) {
@@ -459,22 +460,11 @@ public class WechatServiceImpl implements WechatService {
 					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
 						String[] peopleContent = content.split(":<br/>");
 						String toSendName = this.getUserRemarkName(peopleContent[0]);
-//						String message = "自动回复：@" + toSendName + "\n" + peopleContent[1].replace("<br/>", "\n");
-						
 						String message = new GroudMessageHandler(peopleContent[0],toSendName, peopleContent[1]).handler();
 						if(StringUtils.isNotBlank(message)){
-							
 							webwxsendmsg(wechatMeta, message, msg.getString("FromUserName"));
 						}
-						
-						LOGGER.info(name + ": " + content);
 					}
-//					name = getUserRemarkNameByGroup(msg.getString("FromUserName"));
-					LOGGER.info(name + ": " + content);
-					String[] peopleContent = content.split(":<br/>");
-					String ans = robot.talk(content);
-//					webwxsendmsg(wechatMeta, ans, msg.getString("FromUserName"));
-					LOGGER.info("自动回复 " + ans);
 				}
 			} else if (msgType == 3) {
 				String imgDir = Constant.config.get("app.img_path");
