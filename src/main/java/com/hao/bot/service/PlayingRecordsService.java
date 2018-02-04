@@ -23,4 +23,16 @@ public interface PlayingRecordsService extends BaseService {
     Collection<PlayingRecordsModel> saveAll(Collection<PlayingRecordsModel> models);
  
     List<PlayingRecordsModel> query(QueryRequestEntity entity);
+    
+    /**
+     * 获取当天期数
+     * @return
+     */
+    Integer getCurrentDateTotalRecords();
+    
+    /**
+     * 生成一期记录
+     * @return
+     */
+    PlayingRecordsModel genPlayingRecords();
 }

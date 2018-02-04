@@ -81,5 +81,13 @@ public class BotOrderServiceImpl extends BaseServiceImpl
 		Object[] params = paramList.toArray(new Object[paramList.size()] );
 		return this.dao.findBySqlCondition(BotOrderModel.class,
 				sql.toString(), params,"",entity.getPagingInfo());
+	}
+	@Override
+	public List<BotOrderModel> queryByStatusAndPayingNo(String payingNo, Integer status) {
+		BotOrderModel example = new BotOrderModel();
+		example.setPlayingNo(payingNo);
+		example.setStatus(status);
+		
+		return this.dao.findByExample(example);
 	}        
 }

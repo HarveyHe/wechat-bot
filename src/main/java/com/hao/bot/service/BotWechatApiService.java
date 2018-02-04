@@ -1,5 +1,6 @@
 package com.hao.bot.service;    
 
+import com.blade.kit.json.JSONObject;
 import com.gsst.eaf.core.service.BaseService;
 
 import me.biezhi.wechat.model.WechatMeta;
@@ -30,5 +31,12 @@ public interface BotWechatApiService extends BaseService {
      * @param filePath
      */
     boolean sendImg(WechatMeta meta,String toUser, String filePath);
+    
+    /**
+     * 获取群信息
+     * @param groudName
+     * @return
+     */
+    JSONObject getGroudAccount(String groudName);
     
 }

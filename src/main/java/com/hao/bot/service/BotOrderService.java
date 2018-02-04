@@ -27,4 +27,6 @@ public interface BotOrderService extends BaseService {
     
     List<BotOrderModel> query(QueryRequestEntity entity);
     
+    List<BotOrderModel> queryByStatusAndPayingNo(String payingNo,Integer status);
+    
 }

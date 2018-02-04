@@ -25,6 +25,8 @@ import io.github.biezhi.wechat.utils.MD5Checksum;
 import io.github.biezhi.wechat.utils.OkHttpUtils;
 import io.github.biezhi.wechat.utils.StringUtils;
 import io.github.biezhi.wechat.utils.WeChatUtils;
+import me.biezhi.wechat.Constant;
+import me.biezhi.wechat.model.WechatContact;
 import me.biezhi.wechat.model.WechatMeta;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -213,6 +215,22 @@ public class BotWechatApiServiceImpl extends BaseServiceImpl
         }
         return builder.build();
     }
+
+	@Override
+	public JSONObject getGroudAccount(String groudName) {
+		WechatContact wechatContact = Constant.CONTACT;
+		
+		Map<String, JSONObject> groupMap = wechatContact.getGroupMap();
+		
+		JSONObject contact = null;
+		for (Map.Entry<String,JSONObject> entry : groupMap.entrySet()) {
+			contact = entry.getValue();
+			if(contact.getString("NickName").equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
+				return contact;
+			}
+		}
+		return null;
+	}
      
 	
 }
