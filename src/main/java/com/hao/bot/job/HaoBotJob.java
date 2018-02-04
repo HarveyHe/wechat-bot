@@ -59,6 +59,8 @@ public class HaoBotJob {
 	 * 停止下注
 	 */
 	public void endOrd() {  
+		Date currentDate = new Date();
+		HbConstant.endTime = currentDate;
 		com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
 		WechatMeta wechatMeta = Constant.WECHAT_META;
 		JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
@@ -87,9 +89,9 @@ public class HaoBotJob {
 			PaylingRecordEntity pe = entry.getValue();
 			msg.append("注");
 			msg.append(entry.getKey());
-			msg.append(":");
+			msg.append(":[");
 			msg.append(pe.getRecordValue());
-			msg.append("\n");
+			msg.append("]\n");
 		}
 		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), msg.toString());	
 		msg = new StringBuilder();
@@ -128,9 +130,9 @@ public class HaoBotJob {
 			msg.append("最大注:\n");
 			msg.append("注");
 			msg.append(maxEntity.getRecord());
-			msg.append(":");
+			msg.append(":[");
 			msg.append(maxEntity.getRecordValue());
-			msg.append("\n");
+			msg.append("]\n");
 			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), msg.toString());	
 			msg = new StringBuilder();
 			msg.append("获胜者：\n");
@@ -140,8 +142,9 @@ public class HaoBotJob {
 				BotIntegralModel botIntegralModel =botIntegralService.getByToUserId(botOrderModel.getToUserName());
 				botOrderModel.setStatus(1);
 				if(maxRecord == botOrderModel.getRecord()){
+					msg.append("【");
 					msg.append(botOrderModel.getUserName());
-					msg.append("获取：");
+					msg.append("】获取：");
 					Double point = 0.0;
 					if(totalPoints > botOrderModel.getPoints()){
 						point = botOrderModel.getPoints();
@@ -183,6 +186,7 @@ public class HaoBotJob {
 		records.put(8, this.regulation(model, 8, 0, 3, 6));
 		records.put(9, this.regulation(model, 9, 1, 4, 7));
 		records.put(10, this.regulation(model, 10, 2, 5, 9));
+		result.setRecords(records);
 		return result;
 	}
 	/**

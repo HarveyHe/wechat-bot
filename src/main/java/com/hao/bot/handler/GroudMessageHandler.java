@@ -1,8 +1,11 @@
 package com.hao.bot.handler;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.gsst.eaf.core.context.Context;
+import com.hao.bot.constant.HbConstant;
 import com.hao.bot.model.BotExtractModel;
 import com.hao.bot.model.BotIntegralModel;
 import com.hao.bot.model.BotOrderModel;
@@ -58,23 +61,37 @@ public class GroudMessageHandler {
 	//充分，提取分，查分，下单，撤销单
 	public String handler(){
 		if(StringUtils.isNotBlank(message)){
-			if(message.startsWith("充分")){
+			if(message.startsWith("充分=")){
 				return this.recharge();
-			}else if(message.startsWith("提取分")){
+			}else if(message.startsWith("提取分=")){
 				return this.extract();
-				
-			}else if(message.startsWith("查分")){
+			}else if(message.equals("查分")){
 				return this.query();
 			}else if(message.startsWith("下单")){
 				return this.order();
-			}else if(message.startsWith("撤销单")){
+			}else if(message.equals("撤销单")){
 				return this.cancel();
+			}else if(message.equals("规则")){
+				return this.rule();
 			}
 			
 		}
 		return null;
 	}
-	
+	/**
+	 * 规则
+	 * @return
+	 */
+	private String rule (){
+		StringBuilder result = new StringBuilder();
+		result.append("玩法如下：\n");
+		result.append("下单格式如下：\n下单4=3000\n");
+		result.append("撤销单格式如下：\n撤销单\n");
+		result.append("查分格式如下：\n查分\n");
+		result.append("充分格式如下：\n充分=3000\n");
+		result.append("提取格式如下：\n提取分=100.3\n");
+		return result.toString();
+	}
 
 	/**
 	 * 充值
@@ -89,14 +106,20 @@ public class GroudMessageHandler {
 		BotRechargeModel model = new BotRechargeModel();
 		try {
 			Double points = Double.parseDouble(newString);
-			model.setPoints(points);
-			model.setStatus(0);
-			model.setToUserName(this.wechatUserId);
-			model.setUserName(name);
-			botRechargeService.save(model);
-			result.append("正在充值,耐心等待审核！");
+			if(points > 0){
+				
+				model.setPoints(points);
+				model.setStatus(0);
+				model.setToUserName(this.wechatUserId);
+				model.setUserName(name);
+				botRechargeService.save(model);
+				result.append("正在充分,耐心等待审核！");
+			}else{
+				result.append("充分格式有误；格式如下：\n充分=1000.2,必须大于0");
+				
+			}
 		} catch (NumberFormatException e) {
-			result.append("充值格式有误；格式如下：\n充值=1000.2");
+			result.append("充分格式有误；格式如下：\n充分=1000.2");
 		}
 		return result.toString();
 			
@@ -124,45 +147,62 @@ public class GroudMessageHandler {
 	 * 下单4=3000
 	 */
 	private String order(){
-		
+		Date currentDate = new Date();
 		StringBuilder result = new StringBuilder();
 		result.append("@");
 		result.append(name);
 		result.append("\n");
-		try {
-			// 注意开始时间截止时间
-			String newString = message.substring(2);
-			String[] orderContent = newString.split("=");
-			if(orderContent.length == 2){
-				BotOrderModel model = new BotOrderModel();
-				Double points = Double.parseDouble(orderContent[1]);
-				Integer record = Integer.parseInt(orderContent[0]);
-				if(points != null && record != null){
+		// 注意开始时间截止时间
+		System.out.println(HbConstant.startTime);
+		if(HbConstant.startTime.getTime() < currentDate.getTime() && HbConstant.endTime.getTime() > currentDate.getTime()){
+			
+			try {
+				String newString = message.substring(2);
+				String[] orderContent = newString.split("=");
+				if(orderContent.length == 2){
+					BotOrderModel model = new BotOrderModel();
+					Double points = Double.parseDouble(orderContent[1]);
+					Integer record = Integer.parseInt(orderContent[0]);
+					if(points != null && record != null){
+						
+						BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
+						Double remainingPoints = botIntegralModel == null?0d:botIntegralModel.getRemainingPoints();
+						if(remainingPoints < points){
+							result.append("剩余分不足，剩余分：" + remainingPoints);
+						}else{
+							model.setPoints(points);
+							model.setStatus(0);
+							model.setToUserName(this.wechatUserId);
+							model.setUserName(name);
+							model.setRecord(record);
+							model.setPlayingNo(HbConstant.currentPaylingNo);//下注期数
+							botOrderService.save(model);
+							botIntegralModel.setRemainingPoints(remainingPoints - points);
+							botIntegralService.save(botIntegralModel);
+							result.append("已下单！下注：");
+							result.append(record);
+							result.append("  下注金额：");
+							result.append(points);
+							
+						}
+					}else{
+						result.append("下单格式有误；格式如下：\n下单4=3000");
+					}
 					
-					model.setPoints(points);
-					model.setStatus(0);
-					model.setToUserName(this.wechatUserId);
-					model.setUserName(name);
-					model.setRecord(record);
-					//model.setPlayingNo(playingNo);//下注期数
-					botOrderService.save(model);
-					result.append("已下单！下注：");
-					result.append(record);
-					result.append("  下注金额：");
-					result.append(points);
 				}else{
 					result.append("下单格式有误；格式如下：\n下单4=3000");
+					
 				}
-				
-			}else{
-				result.append("下单格式有误；格式如下：\n下单4=3000");
-				
+			} catch (NumberFormatException e) {
+				result.append("下单格式有误；格式如下：\n下单4=1000.2");
 			}
-		} catch (NumberFormatException e) {
-			result.append("充值格式有误；格式如下：\n充值=1000.2");
+		}else{
+			result.append("现在不是下注时间");
 		}
+			
 		return result.toString();
 	}
+
 	/**
 	 * 撤销单
 	 */
@@ -171,16 +211,27 @@ public class GroudMessageHandler {
 		result.append("@");
 		result.append(name);
 		result.append("\n"); 
-		BotOrderModel model = botOrderService.getByToUserId(wechatUserId, 0);
-		if(model == null){
-			result.append("未下单!");
+		Date currentDate = new Date();
+		if(HbConstant.startTime.getTime() < currentDate.getTime() 
+				&& HbConstant.endTime.getTime() > currentDate.getTime()){
+			
+			BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
+			Double remainingPoints = botIntegralModel == null?0d:botIntegralModel.getRemainingPoints();
+			BotOrderModel model = botOrderService.getByToUserId(wechatUserId, 0);
+			if(model == null){
+				result.append("未下单!");
+			}else{
+				model.setStatus(-1);
+				botOrderService.save(model);
+				result.append("撤销单！撤销注：");
+				result.append(model.getRecord());
+				result.append("  下注金额：");
+				result.append(model.getPoints());
+				botIntegralModel.setRemainingPoints(model.getPoints() + remainingPoints);
+				botIntegralService.save(botIntegralModel);
+			}
 		}else{
-			model.setStatus(-1);
-			botOrderService.save(model);
-			result.append("撤销单！撤销注：");
-			result.append(model.getRecord());
-			result.append("  下注金额：");
-			result.append(model.getRecord());
+			result.append("现在不是下注时间,不能撤销单");
 		}
 		return result.toString();
 	}
@@ -204,7 +255,7 @@ public class GroudMessageHandler {
 			botExtractService.save(model);
 			result.append("正在提取分,耐心等待审核！");
 		} catch (NumberFormatException e) {
-			result.append("提取分格式有误；格式如下：\n提取分=提取分=100.3");
+			result.append("提取分格式有误；格式如下：\n提取分=100.3");
 		}
 		return result.toString();
 		
