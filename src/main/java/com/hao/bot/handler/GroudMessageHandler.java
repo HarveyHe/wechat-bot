@@ -1,7 +1,5 @@
 package com.hao.bot.handler;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.gsst.eaf.core.context.Context;

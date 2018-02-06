@@ -417,7 +417,6 @@ public class WechatServiceImpl implements WechatService {
 	/**
 	 * 处理消息
 	 */
-	@SuppressWarnings("unused")
 	@Override
 	public void handleMsg(WechatMeta wechatMeta, JSONObject data) {
 		if (null == data) {
@@ -456,7 +455,6 @@ public class WechatServiceImpl implements WechatService {
 				} else {
 					if(name.equals(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"))){
 						String[] peopleContent = content.split(":<br/>");
-//						String toSendName = this.getUserRemarkName(peopleContent[0]);
 						String toSendName = this.getUserRemarkNameByGroup(msg.getString("FromUserName"), peopleContent[0]);
 						
 						String message = new GroudMessageHandler(peopleContent[0],toSendName, peopleContent[1]).handler();

@@ -55,17 +55,13 @@ public class HaoBotJob {
 				String playingNo = currentAward.getPeriodNumber();
 				if(!playingNo.equals(HbConstant.currentPaylingNo)){
 					//还是当前一期
-					if(HbConstant.canBuy){
-						Date currentDate = new Date();
-						if(this.addDate(HbConstant.startTime, 4).getTime() <= currentDate.getTime() ){
-							if(HbConstant.endTime == null){
-								HbConstant.endTime = currentDate;
-								//停止下注
-								botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), 
-										"=================\n停止下注\n=================");	
-								HbConstant.canBuy = false;
-							}
-						}
+					Date currentDate = new Date();
+					if(HbConstant.canBuy && this.addDate(HbConstant.startTime, 4).getTime() <= currentDate.getTime()){
+						HbConstant.endTime = currentDate;
+						//停止下注
+						botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), 
+								"=================\n停止下注\n=================");	
+						HbConstant.canBuy = false;
 					}
 				}else{
 					//换期了
@@ -118,45 +114,6 @@ public class HaoBotJob {
 	}
 	
 	
-	/**
-	 * 开始下注
-	 */
-	@Deprecated
-	public void startOrd() {  
-		Date currentDate = new Date();
-		HbConstant.startTime = currentDate;
-		HbConstant.endTime = this.addDate(currentDate, 4);
-		
-		//生成10注
-		com.hao.bot.service.PlayingRecordsService playingRecordsService = Context.getBean(PlayingRecordsService.class);
-		PlayingRecordsModel playingRecordsModel = playingRecordsService.genPlayingRecords();
-		HbConstant.currentPaylingNo = playingRecordsModel.getPlayingNo();
-		HbConstant.currentPaylingRecordId = playingRecordsModel.getPlayingRecordsId();
-		
-		
-		com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
-		WechatMeta wechatMeta = Constant.WECHAT_META;
-		JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
-		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n开始下注\n=================\n");
-		
-	}
-	/**
-	 * 停止下注
-	 */
-	@Deprecated
-	public void endOrd() {  
-		Date currentDate = new Date();
-		HbConstant.endTime = currentDate;
-		if(HbConstant.currentPaylingRecordId != null){
-			
-			com.hao.bot.service.BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
-			WechatMeta wechatMeta = Constant.WECHAT_META;
-			JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
-			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n停止下注\n=================");	
-			//结算
-			this.settleResult();
-		}
-	}
 	
 	/**
 	 * 结算结果
@@ -176,14 +133,18 @@ public class HaoBotJob {
 		msg.append("当前期结果：\n");
 		msg.append("参考期数：");
 		msg.append(result.getReferencePeriods());
+		msg.append("\n");
 		msg.append(result.getReferenceValue());
+		msg.append("\n");
 		for (Entry<Integer, PaylingRecordEntity> entry : records.entrySet()) {
 			PaylingRecordEntity pe = entry.getValue();
 			msg.append("注");
 			msg.append(entry.getKey());
 			msg.append(":[");
 			msg.append(pe.getRecordValue());
-			msg.append("]\n");
+			msg.append("=");
+			msg.append(pe.getScore());
+			msg.append("点]\n");
 		}
 		botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), msg.toString());	
 		msg = new StringBuilder();
@@ -224,6 +185,8 @@ public class HaoBotJob {
 			msg.append(maxEntity.getRecord());
 			msg.append(":[");
 			msg.append(maxEntity.getRecordValue());
+			msg.append("=");
+			msg.append(maxEntity.getScore());
 			msg.append("]\n");
 			msg.append("总下注单数:");
 			msg.append(orders.size());
@@ -282,7 +245,7 @@ public class HaoBotJob {
 		records.put(10, this.regulation(model, 10, 2, 5, 9));
 		result.setRecords(records);
 		result.setReferencePeriods(model.getPlayingNo());
-		result.setReferenceValue(String.format("【%s,%s,%s,%s,%s,%s,%s,%s,%s,%s】", model.getRecord1(), 
+		result.setReferenceValue(String.format("【%s-%s-%s-%s-%s-%s-%s-%s-%s-%s】", model.getRecord1(), 
 				model.getRecord2(), model.getRecord3(), model.getRecord4(),
 				model.getRecord5(), model.getRecord6(), model.getRecord7(),
 				model.getRecord8(), model.getRecord9(), model.getRecord10()));
@@ -307,7 +270,7 @@ public class HaoBotJob {
 				model.getRecord7(),model.getRecord8(),model.getRecord9(),model.getRecord10()};
 		PaylingRecordEntity result = new PaylingRecordEntity();
 		result.setRecord(record);
-		result.setRecordValue(String.format("%s,%s,%s", keyIndexs[index1], keyIndexs[index2] ,keyIndexs[index3]));
+		result.setRecordValue(String.format("%s.%s.%s", keyIndexs[index1], keyIndexs[index2] ,keyIndexs[index3]));
 		int[] newInts = {keyIndexs[index1], keyIndexs[index2] ,keyIndexs[index3]};
 		Arrays.sort(newInts);
 		result.setMax(newInts[2]);
