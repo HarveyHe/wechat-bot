@@ -49,7 +49,7 @@ public class HaoBotJob {
 		if(entity != null){
 			if(HbConstant.currentPaylingRecordId == null){
 				//第一次运行
-				this.setCurrentPeriod(entity.getNext(), false);
+				this.setCurrentPeriod(entity, false);
 			}else{
 				AwardEntity currentAward = entity.getCurrent();
 				String playingNo = currentAward.getPeriodNumber();
@@ -85,19 +85,19 @@ public class HaoBotJob {
 					model.setRecord10(Integer.parseInt(keyIndexs[9]));
 					playingRecordsService.save(model);
 					//结算。。。。。。。
-					if(HbConstant.canBuy){
-						this.settleResult();
-					}
+					this.settleResult();
 					
 					//开始下注
-					this.setCurrentPeriod(entity.getNext(), true);
+					this.setCurrentPeriod(entity, true);
 				}
 			}
 			
 		}
 	}
 	
-	private void setCurrentPeriod(AwardEntity next,boolean isCanBuy){
+	private void setCurrentPeriod(AwardResultEntity entity,boolean isCanBuy){
+		AwardEntity next = entity.getNext();
+		AwardEntity current = entity.getCurrent();
 		PlayingRecordsService playingRecordsService = Context.getBean(PlayingRecordsService.class);
 		String playingNo = next.getPeriodNumber();
 		PlayingRecordsModel model1 = new PlayingRecordsModel();
@@ -105,7 +105,8 @@ public class HaoBotJob {
 		model1 = playingRecordsService.save(model1);
 		HbConstant.currentPaylingRecordId = model1.getPlayingRecordsId();
 		HbConstant.currentPaylingNo = playingNo;
-		HbConstant.startTime = next.getAwardTime();
+		HbConstant.startTime = current.getAwardTime();
+		HbConstant.endTime = null;
 		
 		HbConstant.canBuy = isCanBuy;
 		if( isCanBuy ){
@@ -173,6 +174,9 @@ public class HaoBotJob {
 		List<BotOrderModel> orders = botOrderService.queryByStatusAndPayingNo(HbConstant.currentPaylingNo, 0);
 		StringBuilder msg = new StringBuilder();
 		msg.append("当前期结果：\n");
+		msg.append("参考期数：");
+		msg.append(result.getReferencePeriods());
+		msg.append(result.getReferenceValue());
 		for (Entry<Integer, PaylingRecordEntity> entry : records.entrySet()) {
 			PaylingRecordEntity pe = entry.getValue();
 			msg.append("注");
@@ -277,6 +281,11 @@ public class HaoBotJob {
 		records.put(9, this.regulation(model, 9, 1, 4, 7));
 		records.put(10, this.regulation(model, 10, 2, 5, 9));
 		result.setRecords(records);
+		result.setReferencePeriods(model.getPlayingNo());
+		result.setReferenceValue(String.format("【%s,%s,%s,%s,%s,%s,%s,%s,%s,%s】", model.getRecord1(), 
+				model.getRecord2(), model.getRecord3(), model.getRecord4(),
+				model.getRecord5(), model.getRecord6(), model.getRecord7(),
+				model.getRecord8(), model.getRecord9(), model.getRecord10()));
 		return result;
 	}
 	/**

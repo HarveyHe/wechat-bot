@@ -413,6 +413,7 @@
 				                  <th>下注</th>
 				                  <th>下注分数</th>
 				                  <th>下注期数</th>
+				                  <th>状态</th>
 				                </tr>
 				                <tr v-for="order in orderList" >
 				                  <td>{{order.orderId}}</td>
@@ -425,6 +426,13 @@
 				                  </td>
 				                  <td>
 				                    {{order.playingNo}}
+				                  </td>
+				                  <td>
+				                 	<div class="btn-group" v-if="order.status == 0">
+				                 		待结算
+				                    </div>
+				                  	<div v-if="order.status == -1">审核不通过</div>
+				                  	<div v-if="order.status ==1">审核通过</div>
 				                  </td>
 				                </tr>
 				                
