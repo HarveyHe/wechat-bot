@@ -11,8 +11,9 @@
 	<bean id="triggersStarter" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="startOrdTask" />
-				<ref bean="endOrdTask" />
+				<ref bean="getPk10DataTask" />
+				<!-- <ref bean="startOrdTask" />
+				<ref bean="endOrdTask" /> -->
 			</list>
 		</property>
 		<property name="autoStartup">
@@ -58,6 +59,27 @@
 		<property name="jobDetail" ref="endOrd" />
 		<property name="cronExpression">
              <value>0 3/5 * * * ? *</value>
+         </property>
+	</bean>
+	
+	
+	<!--配置定时器 -->
+	<bean id="getPk10Data" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<bean class="com.hao.bot.job.HaoBotJob" />  
+		</property>
+		<property name="targetMethod">
+			<value>getPk10Data</value>
+		</property>
+		<property name="concurrent">  
+        	<value>false</value>  
+    	</property>
+	</bean>
+
+	<bean id="getPk10DataTask" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="getPk10Data" />
+		<property name="cronExpression">
+             <value>0/15 * * * * ? *</value>
          </property>
 	</bean>
 	

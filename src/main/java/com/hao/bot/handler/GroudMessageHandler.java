@@ -147,14 +147,12 @@ public class GroudMessageHandler {
 	 * 下单4=3000
 	 */
 	private String order(){
-		Date currentDate = new Date();
 		StringBuilder result = new StringBuilder();
 		result.append("@");
 		result.append(name);
 		result.append("\n");
 		// 注意开始时间截止时间
-		System.out.println(HbConstant.startTime);
-		if(HbConstant.startTime.getTime() < currentDate.getTime() && HbConstant.endTime.getTime() > currentDate.getTime()){
+		if(HbConstant.canBuy){
 			
 			try {
 				String newString = message.substring(2);
@@ -211,9 +209,7 @@ public class GroudMessageHandler {
 		result.append("@");
 		result.append(name);
 		result.append("\n"); 
-		Date currentDate = new Date();
-		if(HbConstant.startTime.getTime() < currentDate.getTime() 
-				&& HbConstant.endTime.getTime() > currentDate.getTime()){
+		if(HbConstant.canBuy){
 			
 			BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
 			Double remainingPoints = botIntegralModel == null?0d:botIntegralModel.getRemainingPoints();

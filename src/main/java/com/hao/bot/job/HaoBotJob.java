@@ -17,6 +17,8 @@ import org.springframework.util.CollectionUtils;
 import com.blade.kit.json.JSONObject;
 import com.gsst.eaf.core.context.Context;
 import com.hao.bot.constant.HbConstant;
+import com.hao.bot.entity.AwardEntity;
+import com.hao.bot.entity.AwardResultEntity;
 import com.hao.bot.entity.PaylingRecordEntity;
 import com.hao.bot.entity.PaylingResultEntity;
 import com.hao.bot.model.BotIntegralModel;
@@ -24,6 +26,7 @@ import com.hao.bot.model.BotOrderModel;
 import com.hao.bot.model.PlayingRecordsModel;
 import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.service.BotOrderService;
+import com.hao.bot.service.BotService;
 import com.hao.bot.service.BotWechatApiService;
 import com.hao.bot.service.PlayingRecordsService;
 
@@ -32,6 +35,85 @@ import me.biezhi.wechat.model.WechatMeta;
 
 public class HaoBotJob {
 	
+	/**
+	 * 定时获取北京赛车网开奖数据
+	 */
+	public void getPk10Data(){
+		BotService botService = Context.getBean(BotService.class);
+		PlayingRecordsService playingRecordsService = Context.getBean(PlayingRecordsService.class);
+		BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
+		WechatMeta wechatMeta = Constant.WECHAT_META;
+		JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
+		
+		AwardResultEntity entity = botService.getCurrentAward();
+		if(entity != null){
+			if(HbConstant.currentPaylingRecordId == null){
+				//第一次运行
+				String playingNo = entity.getNext().getPeriodNumber();
+				PlayingRecordsModel model = new PlayingRecordsModel();
+				model.setPlayingNo(playingNo);
+				model = playingRecordsService.save(model);
+				HbConstant.currentPaylingRecordId = model.getPlayingRecordsId();
+				HbConstant.currentPaylingNo = playingNo;
+				HbConstant.startTime = entity.getNext().getAwardTime();
+				HbConstant.canBuy = false;
+			}else{
+				AwardEntity currentAward = entity.getCurrent();
+				String playingNo = currentAward.getPeriodNumber();
+				if(!playingNo.equals(HbConstant.currentPaylingNo)){
+					//还是当前一期
+					if(HbConstant.canBuy){
+						Date currentDate = new Date();
+						if(this.addDate(HbConstant.startTime, 4).getTime() <= currentDate.getTime() ){
+							if(HbConstant.endTime == null){
+								HbConstant.endTime = currentDate;
+								//停止下注
+								botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), 
+										"=================\n停止下注\n=================");	
+							}
+						}
+					}
+				}else{
+					//换期了
+					//保存这期记录
+					PlayingRecordsModel model =playingRecordsService.get(HbConstant.currentPaylingRecordId);
+					String awardNumbers = currentAward.getAwardNumbers();
+					String[] keyIndexs = awardNumbers.split(",");
+					model.setRecord1(Integer.parseInt(keyIndexs[0]));
+					model.setRecord2(Integer.parseInt(keyIndexs[1]));
+					model.setRecord3(Integer.parseInt(keyIndexs[2]));
+					model.setRecord4(Integer.parseInt(keyIndexs[3]));
+					model.setRecord5(Integer.parseInt(keyIndexs[4]));
+					model.setRecord6(Integer.parseInt(keyIndexs[5]));
+					model.setRecord7(Integer.parseInt(keyIndexs[6]));
+					model.setRecord8(Integer.parseInt(keyIndexs[7]));
+					model.setRecord9(Integer.parseInt(keyIndexs[8]));
+					model.setRecord10(Integer.parseInt(keyIndexs[9]));
+					playingRecordsService.save(model);
+					//结算。。。。。。。
+					if(HbConstant.canBuy){
+						this.settleResult();
+					}
+					
+					//开始下注
+					playingNo = entity.getNext().getPeriodNumber();
+					PlayingRecordsModel model1 = new PlayingRecordsModel();
+					model1.setPlayingNo(playingNo);
+					model1 = playingRecordsService.save(model1);
+					HbConstant.currentPaylingRecordId = model1.getPlayingRecordsId();
+					HbConstant.currentPaylingNo = playingNo;
+					HbConstant.startTime = entity.getNext().getAwardTime();
+					HbConstant.canBuy = true;
+					botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n开始下注\n=================\n");
+				}
+			}
+//			HbConstant.startTime;
+//			HbConstant.endTime;
+//			HbConstant.currentPaylingNo;
+//			HbConstant.currentPaylingRecordId;
+			
+		}
+	}
 	
 	
 	/**

@@ -10,11 +10,11 @@ public class HbConstant {
 	/**
 	 * 下注开始时间
 	 */
-	public static Date startTime;
+	public static Date startTime = null;
 	/**
 	 * 下注结束时间
 	 */
-	public static Date endTime;
+	public static Date endTime = null;
 	
 	
 	/**
@@ -22,5 +22,10 @@ public class HbConstant {
 	 */
 	public static String currentPaylingNo;
 	
-	public static Integer currentPaylingRecordId;
+	/**
+	 * 是否可以下注
+	 */
+	public static boolean canBuy = false;
+	
+	public static Integer currentPaylingRecordId = null;
 }
