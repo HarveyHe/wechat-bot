@@ -1,6 +1,7 @@
 package com.hao.bot.service;    
 
 import com.gsst.eaf.core.service.BaseService;
+import com.hao.bot.entity.AwardResultEntity;
 
 public interface BotService extends BaseService {
 
@@ -20,5 +21,10 @@ public interface BotService extends BaseService {
      * @return
      */
     Boolean auditRecharge(Integer id, Integer status);
+    /**
+     * 获取当前期开奖记录
+     * @return
+     */
+    AwardResultEntity getCurrentAward();
     
 }
