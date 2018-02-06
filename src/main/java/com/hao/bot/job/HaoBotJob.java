@@ -49,14 +49,7 @@ public class HaoBotJob {
 		if(entity != null){
 			if(HbConstant.currentPaylingRecordId == null){
 				//第一次运行
-				String playingNo = entity.getNext().getPeriodNumber();
-				PlayingRecordsModel model = new PlayingRecordsModel();
-				model.setPlayingNo(playingNo);
-				model = playingRecordsService.save(model);
-				HbConstant.currentPaylingRecordId = model.getPlayingRecordsId();
-				HbConstant.currentPaylingNo = playingNo;
-				HbConstant.startTime = entity.getNext().getAwardTime();
-				HbConstant.canBuy = false;
+				this.setCurrentPeriod(entity.getNext(), false);
 			}else{
 				AwardEntity currentAward = entity.getCurrent();
 				String playingNo = currentAward.getPeriodNumber();
@@ -70,6 +63,7 @@ public class HaoBotJob {
 								//停止下注
 								botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), 
 										"=================\n停止下注\n=================");	
+								HbConstant.canBuy = false;
 							}
 						}
 					}
@@ -96,22 +90,29 @@ public class HaoBotJob {
 					}
 					
 					//开始下注
-					playingNo = entity.getNext().getPeriodNumber();
-					PlayingRecordsModel model1 = new PlayingRecordsModel();
-					model1.setPlayingNo(playingNo);
-					model1 = playingRecordsService.save(model1);
-					HbConstant.currentPaylingRecordId = model1.getPlayingRecordsId();
-					HbConstant.currentPaylingNo = playingNo;
-					HbConstant.startTime = entity.getNext().getAwardTime();
-					HbConstant.canBuy = true;
-					botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n开始下注\n=================\n");
+					this.setCurrentPeriod(entity.getNext(), true);
 				}
 			}
-//			HbConstant.startTime;
-//			HbConstant.endTime;
-//			HbConstant.currentPaylingNo;
-//			HbConstant.currentPaylingRecordId;
 			
+		}
+	}
+	
+	private void setCurrentPeriod(AwardEntity next,boolean isCanBuy){
+		PlayingRecordsService playingRecordsService = Context.getBean(PlayingRecordsService.class);
+		String playingNo = next.getPeriodNumber();
+		PlayingRecordsModel model1 = new PlayingRecordsModel();
+		model1.setPlayingNo(playingNo);
+		model1 = playingRecordsService.save(model1);
+		HbConstant.currentPaylingRecordId = model1.getPlayingRecordsId();
+		HbConstant.currentPaylingNo = playingNo;
+		HbConstant.startTime = next.getAwardTime();
+		
+		HbConstant.canBuy = isCanBuy;
+		if( isCanBuy ){
+			BotWechatApiService botWechatApiService = Context.getBean(BotWechatApiService.class);
+			WechatMeta wechatMeta = Constant.WECHAT_META;
+			JSONObject contact = botWechatApiService.getGroudAccount(com.gsst.eaf.core.config.Config.get("hao.bot.groud.name"));
+			botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), "=================\n开始下注\n=================\n");
 		}
 	}
 	
@@ -119,6 +120,7 @@ public class HaoBotJob {
 	/**
 	 * 开始下注
 	 */
+	@Deprecated
 	public void startOrd() {  
 		Date currentDate = new Date();
 		HbConstant.startTime = currentDate;
@@ -140,6 +142,7 @@ public class HaoBotJob {
 	/**
 	 * 停止下注
 	 */
+	@Deprecated
 	public void endOrd() {  
 		Date currentDate = new Date();
 		HbConstant.endTime = currentDate;
