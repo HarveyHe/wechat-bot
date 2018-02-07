@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.impl.BaseServiceImpl;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotOrderModel;
@@ -24,21 +23,6 @@ public class BotOrderServiceImpl extends BaseServiceImpl
 	@Override     
 	public BotOrderModel get(java.lang.Integer id){
 		return this.dao.get(BotOrderModel.class,id);
-	}
-	@Override
-	public List<BotOrderModel> findByExample(BotOrderModel example,PagingInfo pagingInfo){
-		if(example == null){
-			example = new BotOrderModel();
-		}
-		return this.dao.findByExample(example,null,pagingInfo);
-	}
-	@Override
-	public void delete(BotOrderModel model){
-		this.dao.remove(model);
-	}
-	@Override
-	public void deleteById(java.lang.Integer id){
-		this.dao.removeByPk(BotOrderModel.class,id);
 	}
 	@Override
 	public BotOrderModel save(BotOrderModel model){

@@ -3,7 +3,6 @@ package com.hao.bot.service;
 import java.util.Collection;
 import java.util.List;
 
-import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.PlayingRecordsModel;
@@ -14,29 +13,32 @@ import com.hao.bot.model.PlayingRecordsModel;
  */
 public interface PlayingRecordsService extends BaseService {
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
     PlayingRecordsModel get(java.lang.Integer id);
     
-    List<PlayingRecordsModel> findByExample(PlayingRecordsModel example,PagingInfo pagingInfo);
-    
-    void delete(PlayingRecordsModel model);
-    
-    void deleteById(java.lang.Integer id);
-    
+    /**
+     * 
+     * @param model
+     * @return
+     */
     PlayingRecordsModel save(PlayingRecordsModel model);
     
+    /**
+     * 
+     * @param models
+     * @return
+     */
     Collection<PlayingRecordsModel> saveAll(Collection<PlayingRecordsModel> models);
  
+    /**
+     * 
+     * @param entity
+     * @return
+     */
     List<PlayingRecordsModel> query(QueryRequestEntity entity);
     
-    /**
-     * 获取当天期数
-     * @return
-     */
-    Integer getCurrentDateTotalRecords();
-    
-    /**
-     * 生成一期记录
-     * @return
-     */
-    PlayingRecordsModel genPlayingRecords();
 }

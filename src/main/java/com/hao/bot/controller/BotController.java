@@ -163,7 +163,7 @@ public class BotController {
 		RestResult<String> result = new RestResult<>();
 		
 		result.setCode(0);
-		result.setData(playingRecordsService.getCurrentDateTotalRecords().toString());
+		result.setData("");
 		return result;
 	}
 	

@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.impl.BaseServiceImpl;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotExtractModel;
@@ -25,21 +24,6 @@ public class BotExtractServiceImpl extends BaseServiceImpl
 	@Override
 	public BotExtractModel get(java.lang.Integer id){
 		return this.dao.get(BotExtractModel.class,id);
-	}
-	@Override
-	public List<BotExtractModel> findByExample(BotExtractModel example,PagingInfo pagingInfo){
-		if(example == null){
-			example = new BotExtractModel();
-		}
-		return this.dao.findByExample(example,null,pagingInfo);
-	}
-	@Override
-	public void delete(BotExtractModel model){
-		this.dao.remove(model);
-	}
-	@Override
-	public void deleteById(java.lang.Integer id){
-		this.dao.removeByPk(BotExtractModel.class,id);
 	}
 	@Override
 	public BotExtractModel save(BotExtractModel model){

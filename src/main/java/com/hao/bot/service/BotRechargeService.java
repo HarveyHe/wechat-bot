@@ -3,7 +3,6 @@ package com.hao.bot.service;
 import java.util.Collection;
 import java.util.List;
 
-import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotRechargeModel;
@@ -15,18 +14,32 @@ import com.hao.bot.model.BotRechargeModel;
  */
 public interface BotRechargeService extends BaseService {
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
     BotRechargeModel get(java.lang.Integer id);
     
-    List<BotRechargeModel> findByExample(BotRechargeModel example,PagingInfo pagingInfo);
-    
-    void delete(BotRechargeModel model);
-    
-    void deleteById(java.lang.Integer id);
-    
+    /**
+     * 
+     * @param model
+     * @return
+     */
     BotRechargeModel save(BotRechargeModel model);
     
+    /**
+     * 
+     * @param models
+     * @return
+     */
     Collection<BotRechargeModel> saveAll(Collection<BotRechargeModel> models);
     
+    /**
+     * 
+     * @param entity
+     * @return
+     */
     List<BotRechargeModel> query(QueryRequestEntity entity);
     
     

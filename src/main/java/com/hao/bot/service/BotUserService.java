@@ -1,10 +1,9 @@
 package com.hao.bot.service;    
 
+import java.util.Collection;
+
 import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.model.BotUserModel;
-import com.gsst.eaf.core.model.PagingInfo;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * 
@@ -13,16 +12,26 @@ import java.util.List;
  */
 public interface BotUserService extends BaseService {
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
     BotUserModel get(java.lang.Integer id);
     
-    List<BotUserModel> findByExample(BotUserModel example,PagingInfo pagingInfo);
     
-    void delete(BotUserModel model);
-    
-    void deleteById(java.lang.Integer id);
-    
+    /**
+     * 
+     * @param model
+     * @return
+     */
     BotUserModel save(BotUserModel model);
     
+    /**
+     * 
+     * @param models
+     * @return
+     */
     Collection<BotUserModel> saveAll(Collection<BotUserModel> models);
     
 }

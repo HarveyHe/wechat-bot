@@ -17,7 +17,11 @@ import com.hao.bot.service.BotWechatApiService;
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.model.WechatContact;
 import me.biezhi.wechat.model.WechatMeta;
-
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotWechatApiServiceImpl extends BaseServiceImpl
               implements BotWechatApiService {
@@ -41,16 +45,16 @@ public class BotWechatApiServiceImpl extends BaseServiceImpl
 		JSONObject body = new JSONObject();
 
 		String clientMsgId = DateKit.getCurrentUnixTime() + StringKit.getRandomNumber(5);
-		JSONObject Msg = new JSONObject();
-		Msg.put("Type", 1);
-		Msg.put("Content", msg);
-		Msg.put("FromUserName", meta.getUser().getString("UserName"));
-		Msg.put("ToUserName", toUser);
-		Msg.put("LocalID", clientMsgId);
-		Msg.put("ClientMsgId", clientMsgId);
+		JSONObject msgParam = new JSONObject();
+		msgParam.put("Type", 1);
+		msgParam.put("Content", msg);
+		msgParam.put("FromUserName", meta.getUser().getString("UserName"));
+		msgParam.put("ToUserName", toUser);
+		msgParam.put("LocalID", clientMsgId);
+		msgParam.put("ClientMsgId", clientMsgId);
 
 		body.put("BaseRequest", meta.getBaseRequest());
-		body.put("Msg", Msg);
+		body.put("Msg", msgParam);
 
 		HttpRequest request = HttpRequest.post(url).contentType("application/json;charset=utf-8")
 				.header("Cookie", meta.getCookie()).send(body.toString());

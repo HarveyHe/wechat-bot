@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.service.impl.BaseServiceImpl;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotRechargeModel;
@@ -24,21 +23,6 @@ public class BotRechargeServiceImpl extends BaseServiceImpl
 	@Override       
 	public BotRechargeModel get(java.lang.Integer id){
 		return this.dao.get(BotRechargeModel.class,id);
-	}
-	@Override
-	public List<BotRechargeModel> findByExample(BotRechargeModel example,PagingInfo pagingInfo){
-		if(example == null){
-			example = new BotRechargeModel();
-		}
-		return this.dao.findByExample(example,null,pagingInfo);
-	}
-	@Override
-	public void delete(BotRechargeModel model){
-		this.dao.remove(model);
-	}
-	@Override
-	public void deleteById(java.lang.Integer id){
-		this.dao.removeByPk(BotRechargeModel.class,id);
 	}
 	@Override
 	public BotRechargeModel save(BotRechargeModel model){
