@@ -61,7 +61,8 @@ public class HaoBotJob {
 				if(!playingNo.equals(HbConstant.currentPaylingNo)){
 					//还是当前一期
 					Date currentDate = new Date();
-					if(HbConstant.canBuy && this.addDate(HbConstant.startTime, 4).getTime() <= currentDate.getTime()){
+					int fourMinute = 4; 
+					if(HbConstant.canBuy && this.addDate(HbConstant.startTime, fourMinute).getTime() <= currentDate.getTime()){
 						HbConstant.endTime = currentDate;
 						//停止下注
 						botWechatApiService.sendText(wechatMeta, contact.getString("UserName"), 
@@ -169,8 +170,7 @@ public class HaoBotJob {
 				if(maxEntity == null){
 					maxEntity = entity;
 				}else{
-					
-					if( maxEntity.getScore() < entity.getScore() 
+					boolean existed =maxEntity.getScore() < entity.getScore() 
 							|| ( maxEntity.getMax() <  entity.getMax() 
 									|| (maxEntity.getMax() ==  entity.getMax() 
 									&& (maxEntity.getSec() <  entity.getSec() 
@@ -178,8 +178,8 @@ public class HaoBotJob {
 											&& maxEntity.getMin() <  entity.getMin())
 										)
 									)
-								)
-						){
+								);
+					if( existed	){
 						
 						maxEntity = entity;
 					}
@@ -237,7 +237,7 @@ public class HaoBotJob {
 		com.hao.bot.service.PlayingRecordsService playingRecordsService = Context.getBean(PlayingRecordsService.class);
 		PlayingRecordsModel model =playingRecordsService.get(HbConstant.currentPaylingRecordId);
 		PaylingResultEntity result = new PaylingResultEntity();
-		Map<Integer,PaylingRecordEntity> records = new HashMap<>();
+		Map<Integer,PaylingRecordEntity> records = new HashMap<>(10);
 		records.put(1, this.regulation(model, 1, 0, 1, 2));
 		records.put(2, this.regulation(model, 2, 1, 2, 3));
 		records.put(3, this.regulation(model, 3, 3, 4, 5));

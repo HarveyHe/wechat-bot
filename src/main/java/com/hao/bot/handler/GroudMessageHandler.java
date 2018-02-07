@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.gsst.eaf.core.context.Context;
 import com.hao.bot.constant.HbConstant;
+import com.hao.bot.enumtype.MsgHandlerType;
 import com.hao.bot.model.BotExtractModel;
 import com.hao.bot.model.BotIntegralModel;
 import com.hao.bot.model.BotOrderModel;
@@ -67,18 +68,36 @@ public class GroudMessageHandler {
 	 */
 	public String handler(){
 		if(StringUtils.isNotBlank(message)){
-			if(message.startsWith("充分=")){
-				return this.recharge();
-			}else if(message.startsWith("提取分=")){
-				return this.extract();
-			}else if(message.equals("查分")){
-				return this.query();
-			}else if(message.startsWith("下单")){
-				return this.order();
-			}else if(message.equals("撤销单")){
-				return this.cancel();
-			}else if(message.equals("规则")){
-				return this.rule();
+			MsgHandlerType msgHandlerType = MsgHandlerType.get(message);
+			if(msgHandlerType != null){
+				String result = "";
+				switch (msgHandlerType) {
+				case RECHARGE:
+					result = this.recharge();
+					break;
+				case EXTRACT:
+					result = this.extract();
+					break;
+				case QUERY:
+					result = this.query();
+					break;
+				case ORDER:
+					result = this.order();
+					
+					break;
+				case CANCEL:
+					result = this.cancel();
+					
+					break;
+				case MSGRULE:
+					
+					result = this.rule();
+					break;
+
+				default:
+					break;
+				}
+				return result;
 			}
 			
 		}
@@ -99,15 +118,18 @@ public class GroudMessageHandler {
 		return result.toString();
 	}
 
+	private void atUserName(StringBuilder result){
+		result.append("@");
+		result.append(name);
+		result.append("\n");
+	}
 	/**
 	 * 充值
 	 * 格式,充值=1000.2
 	 */
 	private String recharge(){
 		StringBuilder result = new StringBuilder();
-		result.append("@");
-		result.append(name);
-		result.append("\n");
+		this.atUserName(result);
 		String newString = message.substring(3);
 		BotRechargeModel model = new BotRechargeModel();
 		try {
@@ -139,9 +161,7 @@ public class GroudMessageHandler {
 		BotIntegralModel model = botIntegralService.getByToUserId(wechatUserId);
 		Double points = model == null?0d:model.getRemainingPoints();
 		StringBuilder result = new StringBuilder();
-		result.append("@");
-		result.append(name);
-		result.append("\n");
+		this.atUserName(result);
 		result.append("剩余积分为：");
 		result.append(points);
 		return result.toString();
@@ -154,16 +174,15 @@ public class GroudMessageHandler {
 	 */
 	private String order(){
 		StringBuilder result = new StringBuilder();
-		result.append("@");
-		result.append(name);
-		result.append("\n");
+		this.atUserName(result);
 		// 注意开始时间截止时间
 		if(HbConstant.canBuy){
 			
 			try {
+				int orderContentSplitSize = 2;
 				String newString = message.substring(2);
 				String[] orderContent = newString.split("=");
-				if(orderContent.length == 2){
+				if(orderContent.length == orderContentSplitSize){
 					BotOrderModel model = new BotOrderModel();
 					Double points = Double.parseDouble(orderContent[1]);
 					Integer record = Integer.parseInt(orderContent[0]);
@@ -184,7 +203,8 @@ public class GroudMessageHandler {
 							 */
 							model.setPlayingNo(HbConstant.currentPaylingNo);
 							botOrderService.save(model);
-							botIntegralModel.setRemainingPoints(remainingPoints - points);
+							double newRemainingPoints = remainingPoints - points;
+							botIntegralModel.setRemainingPoints(newRemainingPoints);
 							botIntegralService.save(botIntegralModel);
 							result.append("已下单！下注：");
 							result.append(record);
@@ -215,9 +235,7 @@ public class GroudMessageHandler {
 	 */
 	private String cancel (){
 		StringBuilder result = new StringBuilder();
-		result.append("@");
-		result.append(name);
-		result.append("\n"); 
+		this.atUserName(result);
 		if(HbConstant.canBuy){
 			
 			BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
@@ -232,7 +250,8 @@ public class GroudMessageHandler {
 				result.append(model.getRecord());
 				result.append("  下注金额：");
 				result.append(model.getPoints());
-				botIntegralModel.setRemainingPoints(model.getPoints() + remainingPoints);
+				double newRemainingPoints = model.getPoints() + remainingPoints;
+				botIntegralModel.setRemainingPoints(newRemainingPoints);
 				botIntegralService.save(botIntegralModel);
 			}
 		}else{
@@ -246,9 +265,7 @@ public class GroudMessageHandler {
 	 */
 	private String extract  (){
 		StringBuilder result = new StringBuilder();
-		result.append("@");
-		result.append(name);
-		result.append("\n");
+		this.atUserName(result);
 		String newString = message.substring(4);
 		try {
 			BotExtractModel model = new BotExtractModel();

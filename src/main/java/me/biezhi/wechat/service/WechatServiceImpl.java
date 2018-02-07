@@ -69,7 +69,7 @@ public class WechatServiceImpl implements WechatService {
 				if (ret == 0) {
 					JSONArray memberList = jsonObject.get("MemberList").asArray();
 					JSONArray contactList = new JSONArray();
-					Map<String, JSONObject> contactMap = new HashMap<>();
+					Map<String, JSONObject> contactMap = new HashMap<>(16);
 					if (null != memberList) {
 						for (int i = 0, len = memberList.size(); i < len; i++) {
 							JSONObject contact = memberList.get(i).asJSONObject();
@@ -222,7 +222,7 @@ public class WechatServiceImpl implements WechatService {
 					JSONArray groudContactList = jsonObject.get("ContactList").asArray();
 //					JSONArray contactList = new JSONArray();
 					if (null != groudContactList) {
-						Map<String, JSONObject> contactMap = new HashMap<>();
+						Map<String, JSONObject> contactMap = new HashMap<>(16);
 						
 						for (int i = 0, len = groudContactList.size(); i < len; i++) {
 							JSONObject contact = groudContactList.get(i).asJSONObject();
@@ -255,7 +255,7 @@ public class WechatServiceImpl implements WechatService {
 		if (StringKit.isNotBlank(res)) {
 			String code = Matchers.match("window.QRLogin.code = (\\d+);", res);
 			if (null != code) {
-				if (code.equals("200")) {
+				if ("200".equals(code)) {
 					return Matchers.match("window.QRLogin.uuid = \"(.*)\";", res);
 				} else {
 					throw new WechatException("错误的状态码: " + code);

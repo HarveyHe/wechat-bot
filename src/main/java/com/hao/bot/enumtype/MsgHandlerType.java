@@ -6,12 +6,29 @@ package com.hao.bot.enumtype;
  */
 
 public enum MsgHandlerType {
-	
-	RECHARGE("充值规则","充分=",3),
+	/**
+	 * 充分
+	 */
+	RECHARGE("充分规则","充分=",3),
+	/**
+	 * 提取分
+	 */
 	EXTRACT("提取分规则","提取分=",4),
+	/**
+	 * 查分
+	 */
 	QUERY("查分规则","查分",0),
+	/**
+	 * 下注
+	 */
 	ORDER("下注规则","下单",2),
+	/**
+	 * 取消下注
+	 */
 	CANCEL("取消下注规则","撤销单",0),
+	/**
+	 * 规则
+	 */
 	MSGRULE("规则","规则",0);
 	
 	private String name;
@@ -41,14 +58,17 @@ public enum MsgHandlerType {
 		this.beginIndex = beginIndex;
 	}
 	
-//	public MsgHandlerType get(String type){
-//		for (MsgHandlerType examType : MsgHandlerType.values()) {
-//            if (examType.getType().equals(type)) {
-//                return examType;
-//            }
-//        }
-//		return null;
-//	}
+	public static MsgHandlerType get(String message){
+		
+		for (MsgHandlerType msgHandlerType : MsgHandlerType.values()) {
+			boolean condition = (msgHandlerType.getBeginIndex() == 0 && msgHandlerType.getRule().equals(message)) ||
+					(message.length() >= msgHandlerType.getBeginIndex() && msgHandlerType.getRule().equals(message.substring(0,msgHandlerType.getBeginIndex())));
+			if(condition){
+				return msgHandlerType;
+			}
+        }
+		return null;
+	}
 	
 	
 }
