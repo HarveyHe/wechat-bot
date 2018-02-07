@@ -203,9 +203,11 @@ public class GroudMessageHandler {
 							 */
 							model.setPlayingNo(HbConstant.currentPaylingNo);
 							botOrderService.save(model);
-							double newRemainingPoints = remainingPoints - points;
-							botIntegralModel.setRemainingPoints(newRemainingPoints);
-							botIntegralService.save(botIntegralModel);
+							if(botIntegralModel != null){
+								double newRemainingPoints = remainingPoints - points;
+								botIntegralModel.setRemainingPoints(newRemainingPoints);
+								botIntegralService.save(botIntegralModel);
+							}
 							result.append("已下单！下注：");
 							result.append(record);
 							result.append("  下注金额：");
@@ -238,8 +240,6 @@ public class GroudMessageHandler {
 		this.atUserName(result);
 		if(HbConstant.canBuy){
 			
-			BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
-			Double remainingPoints = botIntegralModel == null?0d:botIntegralModel.getRemainingPoints();
 			BotOrderModel model = botOrderService.getByToUserId(wechatUserId, 0);
 			if(model == null){
 				result.append("未下单!");
@@ -250,9 +250,13 @@ public class GroudMessageHandler {
 				result.append(model.getRecord());
 				result.append("  下注金额：");
 				result.append(model.getPoints());
-				double newRemainingPoints = model.getPoints() + remainingPoints;
-				botIntegralModel.setRemainingPoints(newRemainingPoints);
-				botIntegralService.save(botIntegralModel);
+				BotIntegralModel botIntegralModel = botIntegralService.getByToUserId(wechatUserId);
+				if(botIntegralModel!=null){
+					Double remainingPoints = botIntegralModel.getRemainingPoints();
+					double newRemainingPoints = model.getPoints() + remainingPoints;
+					botIntegralModel.setRemainingPoints(newRemainingPoints);
+					botIntegralService.save(botIntegralModel);
+				}
 			}
 		}else{
 			result.append("现在不是下注时间,不能撤销单");
