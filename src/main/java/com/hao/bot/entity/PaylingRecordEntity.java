@@ -1,6 +1,11 @@
 package com.hao.bot.entity;
 
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class PaylingRecordEntity {
 	/**
 	 * 分数2

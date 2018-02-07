@@ -6,6 +6,12 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.gsst.eaf.core.model.PagingInfo;
 import com.gsst.eaf.core.utils.JSON;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ * @param <T>
+ */
 public class RestResult<T> {
 	private Integer code;
 	private String message;

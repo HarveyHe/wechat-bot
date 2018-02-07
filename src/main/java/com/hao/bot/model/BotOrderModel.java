@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 /**
+ * @author Harvey.He
  * Model class for bot_order
  * 下注记录
  */

@@ -8,6 +8,10 @@ import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.PlayingRecordsModel;
 
+/**
+ * @author Harvey.He
+ *
+ */
 public interface PlayingRecordsService extends BaseService {
 
     PlayingRecordsModel get(java.lang.Integer id);

@@ -1,5 +1,10 @@
 package com.hao.bot.entity;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class AwardResultEntity {
 	
 	private AwardEntity current;

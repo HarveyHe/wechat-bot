@@ -5,6 +5,11 @@ import com.blade.kit.http.HttpRequest;
 
 import me.biezhi.wechat.Constant;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class MoLiRobot implements Robot {
 
 	private String apiUrl;

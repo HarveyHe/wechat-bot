@@ -8,6 +8,11 @@ import com.blade.kit.json.JSONObject;
 import me.biezhi.wechat.model.WechatMeta;
 import me.biezhi.wechat.service.WechatService;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class WechatListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WechatListener.class);

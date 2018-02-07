@@ -6,6 +6,11 @@ import java.util.Map;
 
 import com.blade.kit.http.HttpRequest;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class CookieUtil {
 
 	public static String getCookie(HttpRequest request) {

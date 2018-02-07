@@ -14,6 +14,10 @@ import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotOrderModel;
 import com.hao.bot.service.BotOrderService;
 
+/**
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotOrderServiceImpl extends BaseServiceImpl
               implements BotOrderService {

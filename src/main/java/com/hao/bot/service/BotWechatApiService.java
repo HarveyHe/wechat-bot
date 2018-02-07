@@ -5,6 +5,11 @@ import com.gsst.eaf.core.service.BaseService;
 
 import me.biezhi.wechat.model.WechatMeta;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public interface BotWechatApiService extends BaseService {
 
     

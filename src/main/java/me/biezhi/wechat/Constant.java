@@ -7,7 +7,11 @@ import com.blade.kit.base.Config;
 
 import me.biezhi.wechat.model.WechatContact;
 import me.biezhi.wechat.model.WechatMeta;
-
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class Constant {
 
 	public static final String HTTP_OK = "200";
@@ -17,7 +21,9 @@ public class Constant {
 	
 	public static final String ITPK_API = "http://i.itpk.cn/api.php";
 	
-	// 特殊用户 须过滤
+	/**
+	 * 特殊用户 须过滤
+	 */
 	public static final List<String> FILTER_USERS = Arrays.asList("newsapp", "fmessage", "filehelper", "weibo", "qqmail", 
 			"fmessage", "tmessage", "qmessage", "qqsync", "floatbottle", "lbsapp", "shakeapp", "medianote", "qqfriend", 
 			"readerapp", "blogapp", "facebookapp", "masssendapp", "meishiapp", "feedsapp", "voip", "blogappweixin", 
@@ -36,7 +42,9 @@ public class Constant {
 	
 	public static WechatContact CONTACT;
 	
-	// 全局配置文件
+	/**
+	 * 全局配置文件
+	 */
 	public static Config config;
 	
 	public static WechatMeta WECHAT_META;

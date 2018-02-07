@@ -7,7 +7,11 @@ import com.gsst.eaf.core.model.PagingInfo;
 import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
-
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotUserServiceImpl extends BaseServiceImpl
               implements BotUserService {

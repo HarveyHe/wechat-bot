@@ -2,6 +2,11 @@ package com.hao.bot.entity;
 
 import java.util.Map;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class PaylingResultEntity {
 	
 		private Map<Integer,PaylingRecordEntity> records;

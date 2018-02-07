@@ -5,6 +5,11 @@ import com.blade.kit.json.JSONObject;
 
 import me.biezhi.wechat.Constant;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class WechatMeta {
 	
 	private String base_uri, redirect_uri, webpush_url = Constant.BASE_URL;

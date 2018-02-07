@@ -25,6 +25,7 @@ import me.biezhi.wechat.util.CookieUtil;
 import me.biezhi.wechat.util.Matchers;
 
 /**
+ * @author Harvey.He
  * Hello world!
  */
 public class WechatRobot {

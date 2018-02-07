@@ -13,6 +13,11 @@ import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotRechargeModel;
 import com.hao.bot.service.BotRechargeService;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotRechargeServiceImpl extends BaseServiceImpl
               implements BotRechargeService {

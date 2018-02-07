@@ -6,6 +6,11 @@ import com.gsst.eaf.core.model.PagingInfo;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public interface BotUserService extends BaseService {
 
     BotUserModel get(java.lang.Integer id);

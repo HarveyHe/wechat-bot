@@ -34,6 +34,11 @@ import com.hao.bot.thread.MyThread;
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.WechatRobot;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class BotController {

@@ -13,6 +13,11 @@ import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotExtractModel;
 import com.hao.bot.service.BotExtractService;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotExtractServiceImpl extends BaseServiceImpl
               implements BotExtractService {

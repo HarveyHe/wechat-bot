@@ -18,6 +18,9 @@ import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.service.BotRechargeService;
 import com.hao.bot.service.BotService;
 
+/**
+ * @author Harvey.He
+ */
 @Service
 public class BotServiceImpl extends BaseServiceImpl
               implements BotService {

@@ -15,7 +15,11 @@ import com.gsst.eaf.core.utils.DateUtils;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.PlayingRecordsModel;
 import com.hao.bot.service.PlayingRecordsService;
-
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class PlayingRecordsServiceImpl extends BaseServiceImpl
               implements PlayingRecordsService {

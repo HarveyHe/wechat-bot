@@ -2,13 +2,27 @@ package com.hao.bot.entity;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class AwardEntity {
+	/**
+	 * 开奖时间
+	 */
+	private Date awardTime; 
 	
-	private Date awardTime; //开奖时间
+	/**
+	 * 开奖期数
+	 */
+	private String periodNumber;
 	
-	private String periodNumber;//665677
-	
-	private String awardNumbers;//"2,8,4,9,10,3,1,5,7,6"
+	/**
+	 * 开奖号码
+	 * "2,8,4,9,10,3,1,5,7,6"
+	 */
+	private String awardNumbers;
 
 	public Date getAwardTime() {
 		return awardTime;

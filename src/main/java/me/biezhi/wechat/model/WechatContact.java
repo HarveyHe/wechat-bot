@@ -5,16 +5,27 @@ import java.util.Map;
 import com.blade.kit.json.JSONArray;
 import com.blade.kit.json.JSONObject;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class WechatContact {
 
-	// 微信联系人列表，可聊天的联系人列表
+	/**
+	 *  微信联系人列表，可聊天的联系人列表
+	 */
 	private JSONArray memberList;
 	private JSONArray contactList;
 	private JSONArray groupList;
 	
 	private Map<String, JSONObject> contactMap;
 	
-	private Map<String, JSONObject> groupMap; //群聊，群用户
+	
+	/**
+	 * 群聊，群用户
+	 */
+	private Map<String, JSONObject> groupMap; 
 	
 	public WechatContact() {
 	}

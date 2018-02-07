@@ -2,6 +2,11 @@ package me.biezhi.wechat;
 
 import com.blade.kit.base.Config;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class Application {
 	
 	public static void main(String[] args) {

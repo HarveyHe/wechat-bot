@@ -13,6 +13,11 @@ import com.hao.bot.service.BotIntegralService;
 import com.hao.bot.service.BotOrderService;
 import com.hao.bot.service.BotRechargeService;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class GroudMessageHandler {
 
 	private String wechatUserId;
@@ -56,7 +61,10 @@ public class GroudMessageHandler {
 		
 	}
 	
-	//充分，提取分，查分，下单，撤销单
+	/**
+	 * 充分，提取分，查分，下单，撤销单
+	 * @return
+	 */
 	public String handler(){
 		if(StringUtils.isNotBlank(message)){
 			if(message.startsWith("充分=")){
@@ -171,7 +179,10 @@ public class GroudMessageHandler {
 							model.setToUserName(this.wechatUserId);
 							model.setUserName(name);
 							model.setRecord(record);
-							model.setPlayingNo(HbConstant.currentPaylingNo);//下注期数
+							/**
+							 * 下注期数
+							 */
+							model.setPlayingNo(HbConstant.currentPaylingNo);
 							botOrderService.save(model);
 							botIntegralModel.setRemainingPoints(remainingPoints - points);
 							botIntegralService.save(botIntegralModel);

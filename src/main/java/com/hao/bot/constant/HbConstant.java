@@ -2,6 +2,11 @@ package com.hao.bot.constant;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class HbConstant {
 
 	private HbConstant() {

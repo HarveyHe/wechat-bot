@@ -13,6 +13,11 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Color;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class QRCodeFrame extends JFrame {
 
 	private static final long serialVersionUID = 8550014433017811556L;

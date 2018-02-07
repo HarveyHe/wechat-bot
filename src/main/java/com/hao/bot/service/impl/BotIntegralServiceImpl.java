@@ -14,6 +14,11 @@ import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotIntegralModel;
 import com.hao.bot.service.BotIntegralService;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 @Service
 public class BotIntegralServiceImpl extends BaseServiceImpl
               implements BotIntegralService {

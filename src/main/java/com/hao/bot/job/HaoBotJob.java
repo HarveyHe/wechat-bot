@@ -33,6 +33,11 @@ import com.hao.bot.service.PlayingRecordsService;
 import me.biezhi.wechat.Constant;
 import me.biezhi.wechat.model.WechatMeta;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class HaoBotJob {
 	
 	/**
@@ -288,13 +293,12 @@ public class HaoBotJob {
 	 */
 	private  Date addDate(Date date,int minute){
 		if(date == null){
-			date=new Date();//取时间  
+			date=new Date();
 		}
 		Calendar calendar = new GregorianCalendar();  
 		calendar.setTime(date);  
-//		calendar.add(Calendar.DATE,day);//把日期往后增加一天.整数往后推,负数往前移动  
 		calendar.add(Calendar.MINUTE, minute);
-		date=calendar.getTime(); //这个时间就是日期往后推的结果   
+		date=calendar.getTime(); 
 		return date;
 		
 	}

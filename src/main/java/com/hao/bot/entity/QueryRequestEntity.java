@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import com.gsst.eaf.core.model.PagingInfo;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class QueryRequestEntity implements Serializable{
 
 	/**

@@ -7,7 +7,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 import com.gsst.eaf.core.utils.BeanUtils;
-
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public class PasswordUtils {
 
 	private PasswordEncoder passwordEncoder;

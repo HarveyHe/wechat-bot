@@ -6,6 +6,11 @@ import me.biezhi.wechat.exception.WechatException;
 import me.biezhi.wechat.model.WechatContact;
 import me.biezhi.wechat.model.WechatMeta;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public interface WechatService {
 	
 	/**

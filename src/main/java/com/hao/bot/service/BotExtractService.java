@@ -8,6 +8,11 @@ import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.entity.QueryRequestEntity;
 import com.hao.bot.model.BotExtractModel;
 
+/**
+ * 
+ * @author Harvey.He
+ *
+ */
 public interface BotExtractService extends BaseService {
 
     BotExtractModel get(java.lang.Integer id);

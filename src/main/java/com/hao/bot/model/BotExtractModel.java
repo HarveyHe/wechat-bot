@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 /**
+ * @author Harvey.He
+ * 
  * Model class for bot_extract
  * 提取记录
  */

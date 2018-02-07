@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 /**
+ * @author Harvey.He
  * Model class for playing_records
  * 牌局记录
  */

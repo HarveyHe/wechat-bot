@@ -3,6 +3,10 @@ package com.hao.bot.service;
 import com.gsst.eaf.core.service.BaseService;
 import com.hao.bot.entity.AwardResultEntity;
 
+/**
+ * @author Harvey.He
+ *
+ */
 public interface BotService extends BaseService {
 
     
